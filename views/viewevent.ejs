@@ -1,0 +1,9 @@
+<%- include('partials/header') %> 
+
+<h1><%= event.eventName %></h1>
+<h2><%= event.eventDateTime.date + '/' + event.eventDateTime.month + 1 + '/' + event.eventDateTime.year %> </h2>
+<h2>Starts at <%= event.eventDateTime.time %></h2>
+<h3>Duration: <%= event.eventLength %> hours</h3>
+<h3>Address: <%= event.eventAddress1 %>, <%= event.eventPostcode %> </h3>
+
+<%- include('partials/footer') %>

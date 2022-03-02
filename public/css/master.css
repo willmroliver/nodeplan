@@ -1,0 +1,145 @@
+/*  COLOURS
+
+*/
+
+/*  FONTS 
+
+*/
+
+/* BOOTSTRAP/HTML DEFAULT OVER-RIDES */
+
+body {
+    padding: 0 10%;
+}
+h1 {
+    margin: 25px 0;
+}
+h2 {
+    margin: 25px 0;
+}
+input {
+    margin: 5px 0;
+}
+p {
+    margin: 0;
+}
+
+
+/* HEADER */
+
+.nav-custom {
+    padding: 0;
+}
+
+
+/* ADDEVENT */
+.add-event {
+    text-align: center;
+}
+.event-time {
+    padding: 10px 0;
+}
+
+
+/* VIEWPLAN */
+.view-plan-title {
+    position: static;
+}
+.view-plan-events {
+    position: static;
+}
+.event {
+    padding: 10px 0;
+}
+
+
+/* CALENDAR */
+
+.calendar-wrapper {
+    padding: 25px 18%;
+}
+.calendar-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "mon tue wed thu fri sat sun";
+    gap: 3px 3px;
+    margin: 3px 0;
+}
+.cal-cell {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+}
+.day-label {
+    background-color: none !important;
+    text-align: center;
+}
+.cal-cell:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+.cell-0 { grid-area: mon }
+.cell-1 { grid-area: tue }
+.cell-2 { grid-area: wed }
+.cell-3 { grid-area: thu }
+.cell-4 { grid-area: fri }
+.cell-5 { grid-area: sat }
+.cell-6 { grid-area: sun }
+
+.cell-date {
+    position: absolute;
+    bottom: 2px;
+    right: 5px;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 1rem;
+}
+.cal-event {
+    background-color: rgba(255, 0, 0, 0.75);
+    border-radius: 5px;
+    display: block;
+    margin: 3px;
+    padding: 10px 0;
+    position: relative;
+    height: 0;
+    opacity: 90%;
+}
+.cal-event:hover {
+    opacity: 100%;
+}
+.event-name {
+    color: white;
+    font-size: 0.8rem;
+    position: absolute;
+    top: 1px;
+    left: 3px;
+    width: 100%;
+}
+.event-name:hover {
+    color: white;
+    text-decoration: none;
+}
+
+@media only screen and (max-width: 1000px) {
+    .calendar-wrapper {
+        padding: 25px 0;
+    }
+    .cal-cell {
+        aspect-ratio: 0.65;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    body {
+        padding: 0 10px;
+    }
+    .cal-cell {
+        aspect-ratio: 0.5;
+    }
+    .event-name {
+        font-size: 0.7rem;
+    }
+}

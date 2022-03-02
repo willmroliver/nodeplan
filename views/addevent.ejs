@@ -1,0 +1,26 @@
+<%- include('partials/header') %>
+
+<div class="add-event">
+
+    <h1>New Event</h1>
+
+    <form action="/" method="post" autocomplete="off">
+        <input type="text" name="eventName" placeholder="Event Name" required>
+        <br>
+        <input type="datetime-local" name="eventDateTime" step="1800" required>
+        <br>
+        <div class="event-time">
+            <input type="range" name="eventLength" min="0" max="8" step="0.5" id="time-in" required>
+            <p id="time-in-label"></p>  
+        </div>
+        <input type="text" name="eventAddress1" placeholder="Address Line 1" required>
+        <input type="text" name="eventPostcode" placeholder="Postcode" required>
+        <br>
+        <button type="submit" class="btn btn-dark">Add to Schedule</button>
+    </form>
+
+</div>
+
+<script src="scripts/addevent.js"></script>
+
+<%- include('partials/footer') %>
