@@ -2,7 +2,7 @@
 
     <h2 id="calendar-title">Month</h2>
 
-    <div class="calendar-grid">
+    <div class="calendar-row">
         <div class="day-label cell-0">Mon</div>
         <div class="day-label cell-1">Tue</div>
         <div class="day-label cell-2">Wed</div>
@@ -12,8 +12,11 @@
         <div class="day-label cell-6">Sun</div>
     </div>
 
+    <div class="calendar-grid">
+
+    </div>
     <% for (var row = 0; row < 5; row++) { %>
-        <div class="calendar-grid row-<%= '' + row %> ">
+        <div class="calendar-row row-<%= '' + row %> ">
             <% for (var col = 0; col < 7; col++) { %> 
                 <div class="cal-cell cell-<%= '' + col %> " id="cell-no-<%= (7*row)+col %>">
                     

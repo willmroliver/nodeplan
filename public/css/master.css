@@ -60,8 +60,26 @@ p {
 }
 .calendar-grid {
     display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "row-0"
+        "row-1"
+        "row-2"
+        "row-3"
+        "row-4";
+}
+
+.row-0 { grid-area: row-0 }
+.row-1 { grid-area: row-1 }
+.row-2 { grid-area: row-2 }
+.row-3 { grid-area: row-3 }
+.row-4 { grid-area: row-4 }
+
+.calendar-row {
+    display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr;
+    grid-template-rows: auto;
     grid-template-areas:
         "mon tue wed thu fri sat sun";
     gap: 3px 3px;
