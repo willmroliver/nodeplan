@@ -61,7 +61,7 @@ p {
 .calendar-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: auto;
+    grid-template-rows: 1fr;
     grid-template-areas:
         "mon tue wed thu fri sat sun";
     gap: 3px 3px;
@@ -70,6 +70,8 @@ p {
 .cal-cell {
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 5px;
+    display: block;
+    float: none;
     position: relative;
     width: 100%;
     aspect-ratio: 1;
@@ -135,9 +137,6 @@ p {
 @media only screen and (max-width: 600px) {
     body {
         padding: 0 10px;
-    }
-    .calendar-grid {
-        float: none;
     }
     .cal-cell {
         aspect-ratio: 0.5;
