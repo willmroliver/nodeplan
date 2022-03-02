@@ -42,12 +42,6 @@ p {
 
 
 /* VIEWPLAN */
-.view-plan-title {
-    position: static;
-}
-.view-plan-events {
-    position: static;
-}
 .event {
     padding: 10px 0;
 }
@@ -56,6 +50,7 @@ p {
 /* CALENDAR */
 
 .calendar-wrapper {
+    display: block;
     padding: 25px 18%;
 }
 .calendar-grid {
