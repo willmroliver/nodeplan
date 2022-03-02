@@ -88,8 +88,6 @@ p {
 .cal-cell {
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-    display: block;
-    float: none;
     position: relative;
     width: 100%;
     aspect-ratio: 1;
