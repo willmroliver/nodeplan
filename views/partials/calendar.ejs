@@ -3,6 +3,11 @@
     <h2 id="calendar-title">Month</h2>
 
     <div class="calendar-row">
+        
+    </div>
+
+    <div class="calendar-grid">
+
         <div class="day-label cell-0">Mon</div>
         <div class="day-label cell-1">Tue</div>
         <div class="day-label cell-2">Wed</div>
@@ -10,31 +15,27 @@
         <div class="day-label cell-4">Fri</div>
         <div class="day-label cell-5">Sat</div>
         <div class="day-label cell-6">Sun</div>
-    </div>
 
-    <div class="calendar-grid">
         <% for (var row = 0; row < 5; row++) { %>
-            <div class="row calendar-row row-<%= '' + row %>">
                 <% for (var col = 0; col < 7; col++) { %> 
-                    <div class="cal-cell cell-<%= '' + col %>" id="cell-no-<%= (7*row)+col %>">
-                        
-                        
-                        
-                        <div class="cell-date-wrapper">
 
-                            <% events.forEach((event) => { %>
-                                <% if (event.eventDateTime.date == (7*row) + col) { %>
-                                    <div class="cal-event" id="event-no-<%= event.eventDateTime.date %>">
-                                        <a class="event-name" href=""><%= event.eventName %></a>
-                                    </div>
-                                <% } %>
-                            <% }) %>
+                    <div class="cal-cell" id="cell-no-<%= (7*row)+col %>">
 
-                            <p class="cell-date" id="cell-date-<%= (7*row)+col %>"></p> 
-                        </div>
+                        <% events.forEach((event) => { %>
+                            <% if (event.eventDateTime.date == (7*row) + col) { %>
+
+                                <div class="cal-event" id="event-no-<%= event.eventDateTime.date %>">
+                                    <a class="event-name" href=""><%= event.eventName %></a>
+                                </div>
+
+                            <% } %>
+                        <% }) %>
+
+                        <p class="cell-date" id="cell-date-<%= (7*row)+col %>"></p> 
+
                     </div>
+                    
                 <% } %>
-            </div>
         <% } %>
     </div>
 

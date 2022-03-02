@@ -60,34 +60,70 @@ p {
 }
 .calendar-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    grid-template-areas:
-        "row-0"
-        "row-1"
-        "row-2"
-        "row-3"
-        "row-4";
-}
-
-.row-0 { grid-area: row-0 }
-.row-1 { grid-area: row-1 }
-.row-2 { grid-area: row-2 }
-.row-3 { grid-area: row-3 }
-.row-4 { grid-area: row-4 }
-
-.calendar-row {
-    display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: auto;
     grid-template-areas:
-        "mon tue wed thu fri sat sun";
+        "mon tue wed thu fri sat sun"
+        "0 1 2 3 4 5 6"
+        "7 8 9 10 11 12 13"
+        "14 15 16 17 18 19 20"
+        "21 22 23 24 25 26 27"
+        "28 29 30 31 32 33 34";
     gap: 3px 3px;
-    margin: 3px 0;
 }
+
+.cell-0 { grid-area: mon }
+.cell-1 { grid-area: tue }
+.cell-2 { grid-area: wed }
+.cell-3 { grid-area: thu }
+.cell-4 { grid-area: fri }
+.cell-5 { grid-area: sat }
+.cell-6 { grid-area: sun }
+
+.cell-no-0 { grid-area: 0 }
+.cell-no-1 { grid-area: 1 }
+.cell-no-2 { grid-area: 2 }
+.cell-no-3 { grid-area: 3 }
+.cell-no-4 { grid-area: 4 }
+.cell-no-5 { grid-area: 5 }
+.cell-no-6 { grid-area: 6 }
+
+.cell-no-7 { grid-area: 7 }
+.cell-no-8 { grid-area: 8 }
+.cell-no-9 { grid-area: 9 }
+.cell-no-10 { grid-area: 10 }
+.cell-no-11 { grid-area: 11 }
+.cell-no-12 { grid-area: 12 }
+.cell-no-13 { grid-area: 13 }
+
+.cell-no-14 { grid-area: 14 }
+.cell-no-15 { grid-area: 15 }
+.cell-no-16 { grid-area: 16 }
+.cell-no-17 { grid-area: 17 }
+.cell-no-18 { grid-area: 18 }
+.cell-no-19 { grid-area: 19 }
+.cell-no-20 { grid-area: 20 }
+
+.cell-no-21 { grid-area: 21 }
+.cell-no-22 { grid-area: 22 }
+.cell-no-23 { grid-area: 23 }
+.cell-no-24 { grid-area: 24 }
+.cell-no-25 { grid-area: 25 }
+.cell-no-26 { grid-area: 26 }
+.cell-no-27 { grid-area: 27 }
+
+.cell-no-28 { grid-area: 28 }
+.cell-no-29 { grid-area: 29 }
+.cell-no-30 { grid-area: 30 }
+.cell-no-31 { grid-area: 31 }
+.cell-no-32 { grid-area: 32 }
+.cell-no-33 { grid-area: 33 }
+.cell-no-34 { grid-area: 34 }
+
 .cal-cell {
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 5px;
+    position: relative;
     width: 100%;
     aspect-ratio: 1;
 }
@@ -98,14 +134,6 @@ p {
 .cal-cell:hover {
     background-color: rgba(0, 0, 0, 0.15);
 }
-
-.cell-0 { grid-area: mon }
-.cell-1 { grid-area: tue }
-.cell-2 { grid-area: wed }
-.cell-3 { grid-area: thu }
-.cell-4 { grid-area: fri }
-.cell-5 { grid-area: sat }
-.cell-6 { grid-area: sun }
 
 .cell-date-wrapper {
     height: 100%;
