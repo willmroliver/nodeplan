@@ -67,9 +67,6 @@ p {
     gap: 3px 3px;
     margin: 3px 0;
 }
-.cal-row-block {
-    display: block;
-}
 .cal-cell {
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 5px;
@@ -138,6 +135,9 @@ p {
 @media only screen and (max-width: 600px) {
     body {
         padding: 0 10px;
+    }
+    .calendar-grid {
+        float: none;
     }
     .cal-cell {
         aspect-ratio: 0.5;
