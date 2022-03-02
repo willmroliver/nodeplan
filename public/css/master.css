@@ -56,7 +56,7 @@ p {
 .calendar-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: auto;
+    grid-template-rows: auto 1fr 1fr 1fr 1fr 1fr;
     grid-template-areas:
         "mon tue wed thu fri sat sun"
         "0 1 2 3 4 5 6"
