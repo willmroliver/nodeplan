@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const { deleteEventById } = require('./my-modules/eventHandler');
 
 const dateHandler = require(__dirname + '/my-modules/dateHandler.js');
 const eventHandler = require(__dirname + '/my-modules/eventHandler.js');
@@ -47,6 +48,13 @@ app.get('/my-plan/:year/:month/:event', (req, res) => {
     fetchEventAndRender(res, 'viewevent', year, month, eventName);
 })
 
+app.get('/event-removed/:eventid', (req, res) => {
+
+    const eventId = req.params.eventid;
+    
+    deleteEventAndRender(res, 'deleteresult', eventId);
+})
+
 // Renders a page to add new events
 app.get('/new-event', (req, res) => {
 
@@ -78,6 +86,14 @@ const fetchEventAndRender = async (res, ejsfilename, year, month, eventName) => 
 
     thisEvent = await eventHandler.retrieveEvent(year, month, eventName);
     res.render(ejsfilename, {event: thisEvent})
+}
+
+// Specifically for DELETERESULT.EJS
+const deleteEventAndRender = async (res, ejsfilename, eventId) => {
+
+    const result =  await deleteEventById(eventId);
+
+    res.render(ejsfilename, {result: result});
 }
 
 app.listen(process.env.PORT || 3000, () => {

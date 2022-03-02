@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -123,3 +123,34 @@ const retrieveAllEvents = () => {
     return run().catch(console.dir);
 }
 module.exports.retrieveAllEvents = retrieveAllEvents;
+
+
+// Delete an event
+const deleteEventById = (eventId) => {
+
+    const client = new MongoClient(uri);
+
+    async function run() {
+        try {
+            await client.connect();
+
+            const database = client.db(dbName);
+            const events = database.collection(defaultCollection);
+
+            const result = await events.deleteOne(
+                { '_id': ObjectId(eventId) }
+            )
+
+            if (result.deletedCount > 0) {
+                return "Successfully removed event."
+            } else {
+                return "Something went wrong."
+            }
+        } finally {
+            await client.close();
+        }
+    }
+
+    return run().catch(console.dir);
+}
+module.exports.deleteEventById = deleteEventById;
