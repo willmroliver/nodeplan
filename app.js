@@ -62,7 +62,7 @@ app.get('/new-event', (req, res) => {
 })
 
 // Handles the addition of a new event
-app.post('/', (req, res) => {
+app.post('/add-event', (req, res) => {
     
     const newEvent = req.body;
 
@@ -74,21 +74,38 @@ app.post('/', (req, res) => {
     res.redirect('/new-event');
 })
 
-// Specifically for CALENDER.EJS
+// Handles event edits
+app.post('/edit-event/:eventid', (req, res) => {
+
+    const newEvent = req.body;
+
+    const dateTimeObject = dateHandler.getDateInfo(req.body.eventDateTime);
+    newEvent['eventDateTime'] = dateTimeObject;
+    
+    const eventId = req.params.eventid;
+    editEventAndRender(res, 'viewevent', eventId, newEvent);
+})
+
+// For CALENDER.EJS
 const fetchEventsByMonthAndRender = async (res, ejsfilename, year, month) => {
 
     events = await eventHandler.retrieveEventsByMonth(year, month);
     res.render(ejsfilename, {events: events, year: year, month: month});
 }
 
-// Specifically for VIEWEVENT.EJS
+// For VIEWEVENT.EJS
 const fetchEventAndRender = async (res, ejsfilename, year, month, eventName) => {
 
     thisEvent = await eventHandler.retrieveEvent(year, month, eventName);
-    res.render(ejsfilename, {event: thisEvent})
+    res.render(ejsfilename, {event: thisEvent});
+}
+const editEventAndRender = async (res, ejsfilename, eventId, newEvent) => {
+
+    thisEvent = await eventHandler.replaceEventById(eventId, newEvent);
+    res.render(ejsfilename, {event: thisEvent});
 }
 
-// Specifically for DELETERESULT.EJS
+// For DELETERESULT.EJS
 const deleteEventAndRender = async (res, ejsfilename, eventId) => {
 
     const result =  await deleteEventById(eventId);

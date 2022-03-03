@@ -1,11 +1,45 @@
 <%- include('partials/header') %> 
 
-<h1><%= event.eventName %></h1>
-<h2><%= event.eventDateTime.date + '/' + event.eventDateTime.month + 1 + '/' + event.eventDateTime.year %> </h2>
-<h2>Starts at <%= event.eventDateTime.time %></h2>
-<h3>Duration: <%= event.eventLength %> hours</h3>
-<h3>Address: <%= event.eventAddress1 %>, <%= event.eventPostcode %> </h3>
+<h1 id="event-name"><%= event.eventName %></h1>
+<h2 id="event-date"><%= event.eventDateTime.date + '/' + (event.eventDateTime.month + 1) + '/' + event.eventDateTime.year %></h2>
+<h2 id="event-time">Starts at <%= event.eventDateTime.time %></h2>
+<h3 id="event-duration">Duration: <%= event.eventLength %> hours</h3>
+<h3 id="event-address-full">Address: <%= event.eventAddress1 %>, <%= event.eventPostcode %> </h3>
 
-<a href="/event-removed/<%= event._id %>">Delete Event</a>
+<button class="btn btn-primary" id="edit-event-btn">Edit Event</button>
+
+
+<div id="popup-background"></div>
+
+<div id="edit-event-popup" class="contents-hidden">
+
+    <div class="popup-content">
+
+        <h4>Edit Event</h4>
+
+        <form action="/edit-event/<%= event._id %>" method="post" autocomplete="off">
+
+            <input type="text" name="eventName" placeholder="Event Name" id="name-in" required>
+            <input type="datetime-local" name="eventDateTime" step="1800" id="datetime-in" required>
+            <div class="event-time">
+                <input type="range" name="eventLength" min="0" max="8" step="0.5" id="time-in" required>
+                <p id="time-in-label"></p>  
+            </div>
+            <input type="text" name="eventAddress1" placeholder="Address Line 1" id="address1-in" required>
+            <input type="text" name="eventPostcode" placeholder="Postcode" id="postcode-in" required>
+
+            <div class="edit-btn-grid">
+                <button type="submit" class="btn btn-primary save-btn" value="">Save Changes</button>
+                <div id="cancel-btn" class="btn btn-dark cancel-btn">Cancel</div>
+                <a href="/event-removed/<%= event._id %>" class="btn btn-danger delete-btn">Delete Event</a>
+            </div>
+
+        </form>
+        
+    </div>
+
+</div>
+
+<script src="/scripts/viewevent.js"></script>
 
 <%- include('partials/footer') %>
