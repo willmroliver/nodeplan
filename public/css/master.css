@@ -7,9 +7,9 @@
 */
 
 /* BOOTSTRAP/HTML DEFAULT OVER-RIDES */
-
 body {
     padding: 0 10%;
+    position: relative;
 }
 h1 {
     margin: 25px 0;
@@ -18,15 +18,19 @@ h2 {
     margin: 25px 0;
 }
 input {
-    margin: 5px 0;
+    display: block;
+    margin: 5px auto;
+    text-align: center;
 }
 p {
     margin: 0;
 }
+.btn {
+    margin: 10px 5px 0 5px;
+}
 
 
 /* HEADER */
-
 .nav-custom {
     padding: 0;
 }
@@ -36,8 +40,25 @@ p {
 .add-event {
     text-align: center;
 }
+.add-event-wrapper {
+    width: 30%;
+    margin: 0 auto;
+}
+.add-event-wrapper input {
+    width: 100%;
+}
 .event-time {
     padding: 10px 0;
+}
+@media only screen and (max-width: 800px) {
+    .add-event-wrapper {
+        width: 50%;
+    }
+}
+@media only screen and (max-width: 400px) {
+    .add-event-wrapper {
+        width: 80%;
+    }
 }
 
 
@@ -47,8 +68,75 @@ p {
 }
 
 
-/* CALENDAR */
+/* VIEWEVENT */
+.edit-event-popup {
+    background-color: white;
+    border-radius: 25px;
+    position: absolute;
+    text-align: center;
 
+    top: 10%;
+    left: 25%;
+    width: 50%;
+    z-index: 2;
+}
+.popup-content {
+    margin: 25px;
+}
+.popup-content input {
+    padding: 5px 0;
+    width: 50%;
+}
+.contents-hidden {
+    display: none;
+}
+.popup-background {
+    background-color: rgba(200, 200, 200, 0.6);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding-bottom: 100vh;
+    z-index: 1;
+}
+.edit-btn-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "save-btn"
+        "cancel-btn"
+        "."
+        "delete-btn";
+    width: 40%;
+    margin: 0 auto;
+}
+.save-btn { grid-area: save-btn }
+.edit-btn { grid-area: edit-btn }
+.delete-btn { grid-area: delete-btn }
+
+@media only screen and (max-width: 900px) {
+    .popup-content input {
+        width: 70%;
+    }
+    .edit-event-popup {
+        left: 15%;
+        width: 70%;
+    }
+    .edit-btn-grid {
+        width: 70%;
+    }
+}
+@media only screen and (max-width: 600px) {
+    .popup-content input {
+        width: 80%;
+    }
+    .edit-btn-grid {
+        width: 80%;
+    }
+}
+
+/* CALENDAR */
 .calendar-wrapper {
     display: block;
     padding: 25px 18%;

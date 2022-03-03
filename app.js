@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const { deleteEventById } = require('./my-modules/eventHandler');
 
 const dateHandler = require(__dirname + '/my-modules/dateHandler.js');
 const eventHandler = require(__dirname + '/my-modules/eventHandler.js');
@@ -47,6 +48,13 @@ app.get('/my-plan/:year/:month/:event', (req, res) => {
     fetchEventAndRender(res, 'viewevent', year, month, eventName);
 })
 
+app.get('/event-removed/:eventid', (req, res) => {
+
+    const eventId = req.params.eventid;
+    
+    deleteEventAndRender(res, 'deleteresult', eventId);
+})
+
 // Renders a page to add new events
 app.get('/new-event', (req, res) => {
 
@@ -54,7 +62,7 @@ app.get('/new-event', (req, res) => {
 })
 
 // Handles the addition of a new event
-app.post('/', (req, res) => {
+app.post('/add-event', (req, res) => {
     
     const newEvent = req.body;
 
@@ -66,18 +74,43 @@ app.post('/', (req, res) => {
     res.redirect('/new-event');
 })
 
-// Specifically for CALENDER.EJS
+// Handles event edits
+app.post('/edit-event/:eventid', (req, res) => {
+
+    const newEvent = req.body;
+
+    const dateTimeObject = dateHandler.getDateInfo(req.body.eventDateTime);
+    newEvent['eventDateTime'] = dateTimeObject;
+    
+    const eventId = req.params.eventid;
+    editEventAndRender(res, 'viewevent', eventId, newEvent);
+})
+
+// For CALENDER.EJS
 const fetchEventsByMonthAndRender = async (res, ejsfilename, year, month) => {
 
     events = await eventHandler.retrieveEventsByMonth(year, month);
     res.render(ejsfilename, {events: events, year: year, month: month});
 }
 
-// Specifically for VIEWEVENT.EJS
+// For VIEWEVENT.EJS
 const fetchEventAndRender = async (res, ejsfilename, year, month, eventName) => {
 
     thisEvent = await eventHandler.retrieveEvent(year, month, eventName);
-    res.render(ejsfilename, {event: thisEvent})
+    res.render(ejsfilename, {event: thisEvent});
+}
+const editEventAndRender = async (res, ejsfilename, eventId, newEvent) => {
+
+    thisEvent = await eventHandler.replaceEventById(eventId, newEvent);
+    res.render(ejsfilename, {event: thisEvent});
+}
+
+// For DELETERESULT.EJS
+const deleteEventAndRender = async (res, ejsfilename, eventId) => {
+
+    const result =  await deleteEventById(eventId);
+
+    res.render(ejsfilename, {result: result});
 }
 
 app.listen(process.env.PORT || 3000, () => {
