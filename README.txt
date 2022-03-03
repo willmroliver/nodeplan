@@ -1,6 +1,11 @@
 --- NODEPLAN WORK-SCHEDULING APP ---
 
 This project is in-progress Node/Express/MongoDB/EJS app to showcase my current skillbase.
+Hosted with Heroku - Go visit! ---> https://node-plan.herokuapp.com/
+
+MOBILE USERS -  Unfortunately I have been so far unable to get the calendar to behave properly on mobile.
+                It has full functionality but calendar cell sizing varies with the number of events on a given date.
+                When no events are contained in a month, this causes the calendar to collapse.
 
 
 
