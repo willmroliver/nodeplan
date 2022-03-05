@@ -16,14 +16,18 @@
         <div class="calendar-grid row-<%= '' + row %> ">
             <% for (var col = 0; col < 7; col++) { %> 
                 <div class="cal-cell cell-<%= '' + col %> " id="cell-no-<%= (7*row)+col %>">
-                    
-                    <% events.forEach((event) => { %>
-                        <% if (event.eventDateTime.date == (7*row) + col) { %>
-                            <div class="cal-event" id="event-no-<%= event.eventDateTime.date %> ">
-                                <a class="event-name" href=""><%= event.eventName %></a>
-                            </div>
-                        <% } %>
-                    <% }) %> 
+
+                    <div class="cal-event-wrapper">
+
+                        <% events.forEach((event) => { %>
+                            <% if (event.eventDateTime.date == (7*row) + col) { %>
+                                <div class="cal-event" id="event-no-<%= event.eventDateTime.date %> ">
+                                    <a class="event-name" href=""><%= event.eventName %></a>
+                                </div>
+                            <% } %>
+                        <% }) %> 
+
+                    </div>
 
                     <p class="cell-date" id="cell-date-<%= (7*row)+col %>"></p> 
                     
