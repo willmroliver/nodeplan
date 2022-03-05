@@ -49,7 +49,8 @@ const dateTimeToDefaultValue = (dateString, timeString) => {
             dateArray[i] = '0' + dateArray[i];
         }
     }
-    return dateArray[2] + '-' + dateArray[1] + '-' + dateArray[0] + 'T' + timeString + ':00';
+    
+    return dateArray[2] + '-' + dateArray[1] + '-' + dateArray[0] + 'T' + timeString;
 }
 eventDateIn.defaultValue = dateTimeToDefaultValue(eventDate, eventTime);
 eventDurationIn.defaultValue = eventDuration;

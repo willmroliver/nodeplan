@@ -102,7 +102,11 @@ const fetchEventAndRender = async (res, ejsfilename, year, month, eventName) => 
 const editEventAndRender = async (res, ejsfilename, eventId, newEvent) => {
 
     thisEvent = await eventHandler.replaceEventById(eventId, newEvent);
-    res.render(ejsfilename, {event: thisEvent});
+    const year = thisEvent.eventDateTime.year;
+    const month = thisEvent.eventDateTime.month;
+    const eventName = thisEvent.eventName;
+    const route = '/my-plan/' + year + '/' + dateHandler.getMonthString(month) + '/' + eventName;
+    res.redirect(route);
 }
 
 // For DELETERESULT.EJS

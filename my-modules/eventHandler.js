@@ -140,8 +140,7 @@ const replaceEventById = (eventId, newEvent) => {
                 {'_id': ObjectId(eventId) },
                 newEvent
             )
-
-            console.log(result);
+            
         } finally {
             await client.close();
         }
