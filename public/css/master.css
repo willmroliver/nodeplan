@@ -298,6 +298,9 @@ p {
     body {
         padding: 0 10px;
     }
+    .calendar-wrapper {
+        padding: 25px 0;
+    }
     .cal-cell {
         padding-top: 150%;
     }
