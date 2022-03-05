@@ -287,10 +287,10 @@ p {
 
 @media only screen and (max-width: 1000px) {
     .calendar-wrapper {
-        padding: 25px 0;
+        padding: 25px 50px;
     }
-    .cal-cell {
-        padding-top: 150%;
+    .event-name {
+        font-size: 0.9rem;
     }
 }
 
@@ -299,7 +299,7 @@ p {
         padding: 0 10px;
     }
     .cal-cell {
-        padding-top: 200%;
+        padding-top: 150%;
     }
     .event-name {
         font-size: 0.7rem;
