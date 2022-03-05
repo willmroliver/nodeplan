@@ -3,20 +3,20 @@
 This project is in-progress Node/Express/MongoDB/EJS app to showcase my current skillbase.
 Hosted with Heroku - Go visit! ---> https://node-plan.herokuapp.com/
 
-MOBILE USERS -  Unfortunately I have been so far unable to get the calendar to behave properly on mobile.
-                It has full functionality but calendar cell sizing varies with the number of events on a given date.
-                When no events are contained in a month, this causes the calendar to collapse.
-
-
 
 --- CURRENT FEATURES ---
 
 Development began 28/02/2022, so current features are limited. Through the site, the user can:
-    - View a calendar which I've hard-coded using EJS and Vanilla JS
+    - View a calendar which I've hard-coded using Vanilla JS/EJS
     - Add events which are saved to a MongoDB Atlas and can be viewed on the calendar
     - Click on calendar events to see further details
     - Modify and delete events on further details page.
 
+
+--- LATEST COMMIT DETAILS ---
+
+    - Added scrollbar onto calendar cells whose events exceeded cell-size
+    - Fixed cell-sizing issues on mobile: App is currently fully mobile-responsive and cross-browser-friendly
 
 
 --- TODO ---
