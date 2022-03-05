@@ -154,13 +154,13 @@ p {
     gap: 3px 3px;
 }
 
-.cell-0 { grid-area: mon }
-.cell-1 { grid-area: tue }
-.cell-2 { grid-area: wed }
-.cell-3 { grid-area: thu }
-.cell-4 { grid-area: fri }
-.cell-5 { grid-area: sat }
-.cell-6 { grid-area: sun }
+.cell-mon { grid-area: mon }
+.cell-tue { grid-area: tue }
+.cell-wed { grid-area: wed }
+.cell-thu { grid-area: thu }
+.cell-fri { grid-area: fri }
+.cell-sat { grid-area: sat }
+.cell-sun { grid-area: sun }
 
 .cell-no-0 { grid-area: 0 }
 .cell-no-1 { grid-area: 1 }
