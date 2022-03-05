@@ -1,7 +1,7 @@
 // This function is specifically to handle date strings formatted as given by HTML datetime-local inputs
 const getDateInfo = (dateString) => {
 
-    const time = dateString.split('T')[1];
+    const time = dateString.split('T')[1].substring(0, 5);
 
     const theDate = new Date(dateString);
     const dayNo = theDate.getDay();
