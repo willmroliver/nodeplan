@@ -85,7 +85,6 @@ const retrieveEvent = (year, month, eventName) => {
                     'eventName': { $eq: eventName } 
                 }
             );
-            console.log(event);
 
             return event;
         } finally {

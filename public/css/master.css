@@ -28,6 +28,10 @@ p {
 .btn {
     margin: 10px 5px 0 5px;
 }
+.navbar {
+    padding-left: 0;
+    padding-right: 0;
+}
 
 /* HEADER */
 .nav-custom {
@@ -75,8 +79,8 @@ p {
     text-align: center;
     
     top: 10%;
-    left: 25%;
-    width: 50%;
+    left: 30%;
+    width: 40%;
     z-index: 2;
 }
 .popup-content {
@@ -84,7 +88,7 @@ p {
 }
 .popup-content input {
     padding: 5px 0;
-    width: 50%;
+    width: 70%;
 }
 .contents-hidden {
     display: none;
@@ -246,12 +250,12 @@ p {
     width: 10px;
 }
 .cal-event-wrapper::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.2);
     border-radius: 25px;
     
 }
 .cal-event-wrapper::-webkit-scrollbar-track {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.2);
     border-radius: 25px;
     margin: 2px 0;
 }
