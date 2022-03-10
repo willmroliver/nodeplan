@@ -317,6 +317,7 @@ p {
     width: 90%;
     height: 0;
     opacity: 90%;
+    overflow: hidden;
 }
 .cal-event:hover {
     opacity: 100%;
@@ -349,9 +350,6 @@ p {
     }
     .calendar-wrapper {
         padding: 25px 0;
-    }
-    .cal-cell {
-        padding-top: 150%;
     }
     .event-name {
         font-size: 0.7rem;
