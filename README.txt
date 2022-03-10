@@ -15,15 +15,13 @@ Development began 28/02/2022, so current features are limited. Through the site,
 
 --- LATEST COMMIT DETAILS ---
 
-    - Added scrollbar onto calendar cells whose events exceeded cell-size
-    - Fixed cell-sizing issues on mobile: App is currently fully mobile-responsive and cross-browser-friendly
+    - Added Google Maps and Geocode API Requests; Event locations are now shown on Google Maps!
 
 
 --- TODO ---
 
 The next immediate features to be added will be:
     - User Accounts, Authentication, etc.
-    - Use Google API to show event location on a map
     - Add buttons to scroll through to different months on the calendar
     - Make sensible restrictions to INSERTing new events (to avoid name-time clashes, etc.)
     - Improve Look and Feel with further CSS formatting (very little styling has been done, focus is on functionality)
