@@ -3,14 +3,13 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 const uri = process.env.MONGODB_URI;
+const client = new MongoClient(uri);
 
 const dbName = 'nodePlanDB';
 const defaultCollection = 'events';
 
 // Insert an event into the DB
 const insertEvent = (newEvent) => {
-
-    const client = new MongoClient(uri);
 
     async function run() {
         try {
@@ -36,8 +35,6 @@ module.exports.insertEvent = insertEvent;
 // Retrieve the events of a given year and month;
 // Preferable to retrieveEvents when rendering calendar;
 const retrieveEventsByMonth = (year, month) => {
-
-    const client = new MongoClient(uri);
 
     async function run() {
         try {

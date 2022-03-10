@@ -36,7 +36,7 @@ const eventTime = document.getElementById("event-time").innerHTML.substring(10);
 const eventDuration = document.getElementById("event-duration").innerHTML.substring(10).split(" hours")[0];
 output.innerHTML = eventDuration + " hours";
 const fullAddressArray = document.getElementById("event-address-full").innerHTML.split(", ");
-const eventAddress1 = fullAddressArray[0].substring(9);
+const eventAddress1 = fullAddressArray[0];
 const eventPostcode = fullAddressArray[1];
 
 eventNameIn.defaultValue = eventName;

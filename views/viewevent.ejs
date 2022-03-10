@@ -1,13 +1,31 @@
-<%- include('partials/header') %> 
+<%- include('partials/header') %>
 
-<h1 id="event-name"><%= event.eventName %></h1>
-<h2 id="event-date"><%= event.eventDateTime.date + '/' + (event.eventDateTime.month + 1) + '/' + event.eventDateTime.year %></h2>
-<h2 id="event-time">Starts at <%= event.eventDateTime.time %></h2>
-<h3 id="event-duration">Duration: <%= event.eventLength %> hours</h3>
-<h3 id="event-address-full">Address: <%= event.eventAddress1 %>, <%= event.eventPostcode %> </h3>
+<script src="/scripts/map.js"></script>
 
-<button class="btn btn-primary" id="edit-event-btn">Edit Event</button>
+<div class="event-info-wrapper">
 
+    <div class="map-info-grid">
+
+        <div id="map" class="event-map"></div>
+
+        <div class="event-title-date">
+            <h1 id="event-name"><%= event.eventName %></h1>
+            <h3 id="event-date"><%= event.eventDateTime.date + '/' + (event.eventDateTime.month + 1) + '/' + event.eventDateTime.year %></h2>    
+        </div>
+        
+        <div class="event-time-info">
+            <h3 id="event-time">Starts at <%= event.eventDateTime.time %></h2>
+            <h4 id="event-duration">Duration: <%= event.eventLength %> hours</h3>
+        </div>
+
+        <div class="event-address-edit">
+            <h4 id="event-address-full"><%= event.eventAddress1 %>, <%= event.eventPostcode %></h3>
+            <button class="btn btn-primary" id="edit-event-btn">Edit Event</button>
+        </div>
+
+    </div>
+
+</div>
 
 <div id="popup-background"></div>
 
@@ -20,7 +38,7 @@
         <form action="/edit-event/<%= event._id %>" method="post" autocomplete="off">
 
             <input type="text" name="eventName" placeholder="Event Name" id="name-in" required>
-            <input type="datetime-local" name="eventDateTime" step="1800" id="datetime-in" required>
+            <input type="datetime-local" name="eventDateTime" step="60" id="datetime-in" required>
             <div class="event-time">
                 <input type="range" name="eventLength" min="0" max="8" step="0.5" id="time-in" required>
                 <p id="time-in-label"></p>  
@@ -41,5 +59,11 @@
 </div>
 
 <script src="/scripts/viewevent.js"></script>
+<script src="/scripts/geocode.js"></script>
+<script
+      src="<%='https://maps.googleapis.com/maps/api/js?key='+process.env.MAPS_API_KEY+'&callback=initMap&libraries=&v=weekly' %>"
+      async
+> 
+</script>
 
 <%- include('partials/footer') %>

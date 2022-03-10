@@ -26,7 +26,7 @@ p {
     margin: 0;
 }
 .btn {
-    margin: 10px 5px 0 5px;
+    margin: 10px 5px 0 0;
 }
 .navbar {
     padding-left: 0;
@@ -72,6 +72,40 @@ p {
 
 
 /* VIEWEVENT */
+.map-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "map event-title-date"
+        "map event-time-info"
+        "map event-address-edit";
+    gap: 50px;
+    margin: 50px auto 20px;
+    text-align: left;
+}
+.event-map {
+    grid-area: map;
+}
+.event-title-date {
+    grid-area: event-title-date;
+}
+#event-name {
+    margin-top: 0;
+}
+.event-time-info {
+    grid-area: event-time-info;
+}
+.event-address-edit {
+    grid-area: event-address-edit;
+}
+#map {
+    height: 400px;
+    width: 100%;
+}
+.event-info-wrapper {
+    text-align: center;
+}
 .edit-event-popup {
     background-color: white;
     border-radius: 25px;
@@ -131,6 +165,17 @@ p {
     }
 }
 @media only screen and (max-width: 600px) {
+    .map-info-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "event-title-date"
+            "map"
+            "event-time-info"
+            "event-address-edit";
+    }
+    #edit-event-btn {
+        margin: 25px 0;
+    }
     .popup-content input {
         width: 80%;
     }
