@@ -111,3 +111,11 @@ const getMonthNumber = (monthString) => {
     }
 }  
 module.exports.getMonthNumber = getMonthNumber;
+
+// Gets starting index for event-placement in calendar cells (see CALENDAR.JS - const startingIndex)
+const getStartingIndex = (year, month) => {
+    
+    const date = new Date(year, month, 1);
+    return (date.getDay() - 1) % 7;
+}
+module.exports.getStartingIndex = getStartingIndex;

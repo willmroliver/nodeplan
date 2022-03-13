@@ -34,8 +34,9 @@ app.get('/my-plan/:year/:month', (req, res) => {
 
     const year = parseInt(req.params.year);
     const month = parseInt(dateHandler.getMonthNumber(req.params.month));
+    const startingIndex = dateHandler.getStartingIndex(year, month);
 
-    fetchEventsByMonthAndRender(res, 'viewplan', year, month);
+    fetchEventsByMonthAndRender(res, 'viewplan', year, month, startingIndex);
 })
 
 // Renders the full-details page of a particular event
@@ -87,10 +88,16 @@ app.post('/edit-event/:eventid', (req, res) => {
 })
 
 // For CALENDER.EJS
-const fetchEventsByMonthAndRender = async (res, ejsfilename, year, month) => {
+const fetchEventsByMonthAndRender = async (res, ejsfilename, year, month, startingIndex) => {
 
     events = await eventHandler.retrieveEventsByMonth(year, month);
-    res.render(ejsfilename, {events: events, year: year, month: month});
+
+    res.render(ejsfilename, {
+        events: events, 
+        year: year, 
+        month: month,
+        startingIndex: startingIndex
+    });
 }
 
 // For VIEWEVENT.EJS
@@ -99,6 +106,7 @@ const fetchEventAndRender = async (res, ejsfilename, year, month, eventName) => 
     thisEvent = await eventHandler.retrieveEvent(year, month, eventName);
     res.render(ejsfilename, {event: thisEvent});
 }
+
 const editEventAndRender = async (res, ejsfilename, eventId, newEvent) => {
 
     thisEvent = await eventHandler.replaceEventById(eventId, newEvent);

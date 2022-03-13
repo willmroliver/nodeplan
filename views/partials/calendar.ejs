@@ -1,40 +1,46 @@
-<div class="calendar-wrapper">
+<div class="view-plan-grid">
 
-    <h2 id="calendar-title">Month</h2>
+    <a id="cal-prev" class="calendar-prev" href="">Previous</a>
 
-    <div class="calendar-grid">
-        <div class="day-label cell-mon">Mon</div>
-        <div class="day-label cell-tue">Tue</div>
-        <div class="day-label cell-wed">Wed</div>
-        <div class="day-label cell-thu">Thu</div>
-        <div class="day-label cell-fri">Fri</div>
-        <div class="day-label cell-sat">Sat</div>
-        <div class="day-label cell-sun">Sun</div>
+    <div class="calendar-wrapper">
 
-        <% for (var row = 0; row < 5; row++) { %>
-            <% for (var col = 0; col < 7; col++) { %> 
-                <div class="cal-cell" id="cell-no-<%= (7*row)+col %>">
+        <h2 id="calendar-title">Month</h2>
 
-                    <div class="cal-event-wrapper">
+        <div class="calendar-grid">
+            <div class="day-label cell-mon">Mon</div>
+            <div class="day-label cell-tue">Tue</div>
+            <div class="day-label cell-wed">Wed</div>
+            <div class="day-label cell-thu">Thu</div>
+            <div class="day-label cell-fri">Fri</div>
+            <div class="day-label cell-sat">Sat</div>
+            <div class="day-label cell-sun">Sun</div>
 
-                        <% events.forEach((event) => { %>
-                            <% if (event.eventDateTime.date == (7*row) + col) { %>
-                                <div class="cal-event" id="event-no-<%= event.eventDateTime.date %> ">
-                                    <a class="event-name" href=""><%= event.eventName %></a>
-                                </div>
-                            <% } %>
-                        <% }) %> 
+            <% for (var row = 0; row < 6; row++) { %>
+                <% for (var col = 0; col < 7; col++) { %> 
+                    <div class="cal-cell" id="cell-no-<%= (7*row)+col %>">
 
+                        <div class="cal-event-wrapper" id="event-wrapper-<%= (7*row)+col %>">
+
+                            <% events.forEach((event) => { %>
+                                <% if (event.eventDateTime.date == (7*row) + col + 1 - startingIndex) { %>
+                                    <div class="cal-event" id="event-no-<%= event.eventDateTime.date %> ">
+                                        <a class="event-name" href=""><%= event.eventName %></a>
+                                    </div>
+                                <% } %>
+                            <% }) %> 
+
+                        </div>
+
+                        <p class="cell-date" id="cell-date-<%= (7*row)+col %>"></p> 
+                        
                     </div>
+                <% } %>
+            <% } %>  
+        </div>
 
-                    <p class="cell-date" id="cell-date-<%= (7*row)+col %>"></p> 
-                    
-                </div>
-            <% } %>
-        <% } %>  
     </div>
 
-    
+    <a id="cal-next" class="calendar-next" href="">Next</a>
 
 </div>
 

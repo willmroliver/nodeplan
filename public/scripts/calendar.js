@@ -1,3 +1,7 @@
+function mod(n, m) {
+    return ((n % m) + m) % m;
+}
+
 const monthToString = (monthInt) => {
 
     switch (monthInt) {
@@ -75,25 +79,26 @@ function generateCalendar(year, month) {
     if (month == currDate.getMonth() && year == currDate.getFullYear()) { isCurrMonth = true } 
     else { isCurrMonth = false }
 
-    document.getElementById('calendar-title').innerHTML = monthToString(month);
+    document.getElementById('calendar-title').innerHTML = monthToString(month) + " " + year;
 
     const startOfMonth = new Date(year, month, 1);
-    const startingIndex = (startOfMonth.getDay() - 1) % 7;
+    const startingIndex = mod(startOfMonth.getDay() - 1, 7);
+    console.log(startingIndex);
 
     // Attaches CSS classes to active dates and enumerates them
-    for (var i = 0; i < 35; i++) {
+    for (var i = 0; i < 42; i++) {
 
         const calCell = document.getElementById('cell-no-' + i);
     
         if ((i < 7 && i < startingIndex) || (i >= (monthLen + startingIndex))) {
-            calCell.style.background = 'none';
+            calCell.style.backgroundColor = 'rgba(0, 0, 0, 0.04)';
         }
         else {
             const cellDate = document.getElementById('cell-date-' + i);
             cellDate.innerHTML = i + 1 - startingIndex;
     
             if (i + 1 - startingIndex == date && isCurrMonth === true) {
-                calCell.style.backgroundColor = 'rgba(0, 0, 0, 0.15)';
+                calCell.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
             }
         }
     }
@@ -107,6 +112,39 @@ function generateCalendar(year, month) {
     }
 }
 
+// Sets hyperlinks for previous and next to the previous and next monthString
+function getPreviousMonth(year, month) {
+    
+    var newYear = year;
+    var newMonth = mod((month - 1), 12);
+
+    if (newMonth === 11) { newYear -= 1; }
+
+    return { year: newYear, month: newMonth };
+}
+function getNextMonth(year, month) {
+
+    var newYear = year;
+    var newMonth = mod((month + 1), 12);
+
+    if (newMonth === 0) { newYear += 1; }
+
+    return { year: newYear, month: newMonth };
+}
+function setPrevNextLinks(year, month) {
+    
+    const prevMonth = getPreviousMonth(year, month);
+    const nextMonth = getNextMonth(year, month);
+
+    const prevLink = '/my-plan/'+prevMonth.year+'/'+monthToString(prevMonth.month).toLowerCase();
+    const nextLink = '/my-plan/'+nextMonth.year+'/'+monthToString(nextMonth.month).toLowerCase();
+
+    document.getElementById('cal-prev').href = prevLink;
+    document.getElementById('cal-next').href = nextLink;
+
+    console.log(document.getElementById('cal-prev').href);
+}
+
 // Server passes year and month for calender rendering to client-side script;
 // Uses innerHTMLs of divs given by below IDs, which are then cleared.
 var yearPassed = parseInt(document.getElementById('route-year-passer').innerHTML)
@@ -116,3 +154,5 @@ document.getElementById('route-year-passer').innerHTML = '';
 document.getElementById('route-month-passer').innerHTML = '';
 
 generateCalendar(yearPassed, monthPassed);
+setPrevNextLinks(yearPassed, monthPassed);
+
