@@ -22,8 +22,8 @@
                         <div class="cal-event-wrapper" id="event-wrapper-<%= (7*row)+col %>">
 
                             <% events.forEach((event) => { %>
-                                <% if (event.eventDateTime.date == (7*row) + col + 1 - startingIndex) { %>
-                                    <div class="cal-event" id="event-no-<%= event.eventDateTime.date %> ">
+                                <% if (event.startDateTime.date == (7*row) + col + 1 - startingIndex) { %>
+                                    <div class="cal-event" id="event-no-<%= event.startDateTime.date %> ">
                                         <a class="event-name" href=""><%= event.eventName %></a>
                                     </div>
                                 <% } %>

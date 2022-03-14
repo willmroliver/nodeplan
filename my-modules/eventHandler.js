@@ -1,5 +1,6 @@
 const { MongoClient, ObjectId } = require('mongodb');
 const dotenv = require('dotenv');
+const dateHandler = require(__dirname + '/dateHandler.js');
 
 dotenv.config();
 const uri = process.env.MONGODB_URI;
@@ -7,6 +8,20 @@ const client = new MongoClient(uri);
 
 const dbName = 'nodePlanDB';
 const defaultCollection = 'events';
+
+// Create a properly formatted Event Object from req.body data
+const createEventObject = (reqBody) => {
+
+    const newEvent = reqBody;
+
+    const startDateTimeObject = dateHandler.getDateInfo(reqBody.startDateTime);
+    const endDateTimeObject = dateHandler.getDateInfo(reqBody.endDateTime);
+    newEvent['startDateTime'] = startDateTimeObject;
+    newEvent['endDateTime'] = endDateTimeObject;
+
+    return newEvent;
+}
+module.exports.createEventObject = createEventObject;
 
 // Insert an event into the DB
 const insertEvent = (newEvent) => {
@@ -45,8 +60,8 @@ const retrieveEventsByMonth = (year, month) => {
 
             const eventsCursor = events.find(
                 {
-                    'eventDateTime.year': { $eq: year } ,
-                    'eventDateTime.month': { $eq: month } 
+                    'startDateTime.year': { $eq: year } ,
+                    'startDateTime.month': { $eq: month } 
                 }
             );
 
@@ -77,8 +92,8 @@ const retrieveEvent = (year, month, eventName) => {
 
             const event = await events.findOne(
                 {
-                    'eventDateTime.year': { $eq: year } ,
-                    'eventDateTime.month': { $eq: month },
+                    'startDateTime.year': { $eq: year } ,
+                    'startDateTime.month': { $eq: month },
                     'eventName': { $eq: eventName } 
                 }
             );

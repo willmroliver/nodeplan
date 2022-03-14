@@ -65,23 +65,16 @@ app.get('/new-event', (req, res) => {
 // Handles the addition of a new event
 app.post('/add-event', (req, res) => {
     
-    const newEvent = req.body;
-
-    const dateTimeObject = dateHandler.getDateInfo(req.body.eventDateTime);
-    newEvent['eventDateTime'] = dateTimeObject;
+    const newEvent = eventHandler.createEventObject(req.body)
 
     eventHandler.insertEvent(newEvent);
-
     res.redirect('/new-event');
 })
 
 // Handles event edits
 app.post('/edit-event/:eventid', (req, res) => {
 
-    const newEvent = req.body;
-
-    const dateTimeObject = dateHandler.getDateInfo(req.body.eventDateTime);
-    newEvent['eventDateTime'] = dateTimeObject;
+    const newEvent = eventHandler.createEventObject(req.body);
     
     const eventId = req.params.eventid;
     editEventAndRender(res, 'viewevent', eventId, newEvent);
@@ -103,13 +96,13 @@ const fetchEventsByMonthAndRender = async (res, ejsfilename, year, month, starti
 // For VIEWEVENT.EJS
 const fetchEventAndRender = async (res, ejsfilename, year, month, eventName) => {
 
-    thisEvent = await eventHandler.retrieveEvent(year, month, eventName);
+    const thisEvent = await eventHandler.retrieveEvent(year, month, eventName);
     res.render(ejsfilename, {event: thisEvent});
 }
 
 const editEventAndRender = async (res, ejsfilename, eventId, newEvent) => {
 
-    thisEvent = await eventHandler.replaceEventById(eventId, newEvent);
+    const thisEvent = await eventHandler.replaceEventById(eventId, newEvent);
     const year = thisEvent.eventDateTime.year;
     const month = thisEvent.eventDateTime.month;
     const eventName = thisEvent.eventName;

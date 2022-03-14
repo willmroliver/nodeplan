@@ -8,14 +8,17 @@
 
         <div id="map" class="event-map"></div>
 
-        <div class="event-title-date">
-            <h1 id="event-name"><%= event.eventName %></h1>
-            <h3 id="event-date"><%= event.eventDateTime.date + '/' + (event.eventDateTime.month + 1) + '/' + event.eventDateTime.year %></h2>    
+        <div class="event-title">
+            <h1 id="event-name"><%= event.eventName %></h1>    
         </div>
         
-        <div class="event-time-info">
-            <h3 id="event-time">Starts at <%= event.eventDateTime.time %></h2>
-            <h4 id="event-duration">Duration: <%= event.eventLength %> hours</h3>
+        <div class="start-date-time">
+            <h4>Starts</h4>
+            <h4 id="start-date-time"><%= event.startDateTime.time %>, <%= event.startDateTime.date + '/' + (event.startDateTime.month + 1) + '/' + event.startDateTime.year %></h4>
+        </div>
+        <div class="end-date-time">
+            <h4>Ends</h4>
+            <h4 id="end-date-time"><%= event.endDateTime.time %>, <%= event.endDateTime.date + '/' + (event.endDateTime.month + 1) + '/' + event.endDateTime.year %></h4>
         </div>
 
         <div class="event-address-edit">

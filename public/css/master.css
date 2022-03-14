@@ -8,7 +8,7 @@
 
 /* BOOTSTRAP/HTML DEFAULT OVER-RIDES */
 body {
-    padding: 0 10%;
+    padding: 0 15%;
     position: relative;
 }
 h1 {
@@ -49,6 +49,9 @@ p {
 }
 .add-event-wrapper input {
     width: 100%;
+}
+.add-event-wrapper label {
+    text-align: left;
 }
 .event-time {
     padding: 10px 0;
@@ -298,24 +301,28 @@ a.calendar-prev, a.calendar-next {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto;
     grid-template-areas:
-        "map event-title-date"
-        "map event-time-info"
+        "map event-title"
+        "map start-date-time"
+        "map end-date-time"
         "map event-address-edit";
-    gap: 50px;
+    gap: 10px 50px;
     margin: 50px auto 20px;
     text-align: left;
 }
 .event-map {
     grid-area: map;
 }
-.event-title-date {
-    grid-area: event-title-date;
+.event-title {
+    grid-area: event-title;
 }
 #event-name {
     margin-top: 0;
 }
-.event-time-info {
-    grid-area: event-time-info;
+.start-date-time {
+    grid-area: start-date-time;
+}
+.end-date-time {
+    grid-area: end-date-time;
 }
 .event-address-edit {
     grid-area: event-address-edit;
@@ -354,7 +361,7 @@ a.calendar-prev, a.calendar-next {
     top: 0;
     left: 0;
     width: 100%;
-    padding-bottom: 150vh;
+    height: 150%;
     z-index: 1;
 }
 .edit-btn-grid {
@@ -389,13 +396,20 @@ a.calendar-prev, a.calendar-next {
     .map-info-grid {
         grid-template-columns: 1fr;
         grid-template-areas:
-            "event-title-date"
+            "event-title"
+            "start-date-time"
+            "end-date-time"
             "map"
-            "event-time-info"
             "event-address-edit";
+    }
+    #map {
+        height: 300px;
     }
     #edit-event-btn {
         margin: 25px 0;
+    }
+    .edit-event-popup {
+        top: 38%;
     }
     .popup-content input {
         width: 80%;
