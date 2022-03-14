@@ -15,9 +15,7 @@ Development began 28/02/2022, so current features are limited. Through the site,
 
 --- LATEST COMMIT DETAILS ---
 
-    - Added Google Maps and Geocode API Requests; Event locations are now shown on Google Maps!
-    - Added Previous/Next links to navigate calendar.
-    - Fixed a major bug (another row was needed on the calendar for certain months).
+    - Replaced 'Duration' feature with 'EndDateTime' for a more flexible user-experience.
 
 
 --- TODO ---
