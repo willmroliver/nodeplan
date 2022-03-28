@@ -9,6 +9,21 @@ const client = new MongoClient(uri);
 const dbName = 'nodePlanDB';
 const defaultCollection = 'events';
 
+
+
+// UTILITY FUNCTIONS
+
+// Initializes the connection to the MongoDB Atlas
+const connectToMongoDB = async () => {
+    try {
+        client.connect();
+    } catch (err) {
+        console.log(error);
+        client.close();
+    }
+}
+connectToMongoDB();
+
 // Create a properly formatted Event Object from req.body data
 const createEventObject = (reqBody) => {
 
@@ -23,13 +38,15 @@ const createEventObject = (reqBody) => {
 }
 module.exports.createEventObject = createEventObject;
 
+
+
+// CRUD FUNCTIONS
+
 // Insert an event into the DB
 const insertEvent = (newEvent) => {
 
     async function run() {
         try {
-            await client.connect();
-
             const database = client.db(dbName);
             const events = database.collection(defaultCollection);
 
@@ -38,11 +55,11 @@ const insertEvent = (newEvent) => {
             const result = await events.insertOne(doc);
 
             console.log(`A document was inserted with the _id: ${result.insertedId}`);
-        } finally {
-            await client.close();
+        } catch (err) {
+            console.log(err);
         }
     }
-    run().catch(console.dir);
+    run()
 }
 module.exports.insertEvent = insertEvent;
 
@@ -53,8 +70,6 @@ const retrieveEventsByMonth = (year, month) => {
 
     async function run() {
         try {
-            await client.connect();
-            
             const database = client.db(dbName);
             const events = database.collection(defaultCollection);
 
@@ -68,12 +83,11 @@ const retrieveEventsByMonth = (year, month) => {
             const eventsArray = await eventsCursor.toArray();
 
             return eventsArray;
-        } finally {
-            await client.close();
+        } catch (err) {
+            console.log(err);
         }
     }
-
-    return run().catch(console.dir);
+    return run();
 }
 module.exports.retrieveEventsByMonth = retrieveEventsByMonth;
 
@@ -81,12 +95,8 @@ module.exports.retrieveEventsByMonth = retrieveEventsByMonth;
 // Will be over-ridden in future to allow for custom event requests
 const retrieveEvent = (year, month, eventName) => {
 
-    const client = new MongoClient(uri);
-
     async function run() {
         try {
-            await client.connect();
-            
             const database = client.db(dbName);
             const events = database.collection(defaultCollection);
 
@@ -99,12 +109,11 @@ const retrieveEvent = (year, month, eventName) => {
             );
 
             return event;
-        } finally {
-            await client.close();
+        } catch (err) {
+            console.log(err);
         }
     }
-
-    return run().catch(console.dir);
+    return run();
 }
 module.exports.retrieveEvent = retrieveEvent;
 
@@ -112,12 +121,8 @@ module.exports.retrieveEvent = retrieveEvent;
 // Retrieves ALL events
 const retrieveAllEvents = () => {
 
-    const client = new MongoClient(uri);
-
     async function run() {
         try {
-            await client.connect();
-            
             const database = client.db(dbName);
             const events = database.collection(defaultCollection);
 
@@ -126,24 +131,19 @@ const retrieveAllEvents = () => {
             const eventsArray = await eventsCursor.toArray();
 
             return eventsArray;
-        } finally {
-            await client.close();
+        } catch (err) {
+            console.log(err);
         }
     }
-
-    return run().catch(console.dir);
+    return run();
 }
 module.exports.retrieveAllEvents = retrieveAllEvents;
 
 //Update an event
 const replaceEventById = (eventId, newEvent) => {
 
-    const client = new MongoClient(uri);
-
     async function run() {
         try {
-            await client.connect();
-
             const database = client.db(dbName);
             const events = database.collection(defaultCollection);
 
@@ -151,14 +151,13 @@ const replaceEventById = (eventId, newEvent) => {
                 {'_id': ObjectId(eventId) },
                 newEvent
             )
+            return result;
             
-        } finally {
-            await client.close();
+        } catch (err) {
+            console.log(err);
         }
     }
-    run().catch(console.dir);
-
-    return newEvent;
+    return run();
 }
 module.exports.replaceEventById = replaceEventById;
 
@@ -166,12 +165,8 @@ module.exports.replaceEventById = replaceEventById;
 // Delete an event
 const deleteEventById = (eventId) => {
 
-    const client = new MongoClient(uri);
-
     async function run() {
         try {
-            await client.connect();
-
             const database = client.db(dbName);
             const events = database.collection(defaultCollection);
 
@@ -184,11 +179,10 @@ const deleteEventById = (eventId) => {
             } else {
                 return "Something went wrong."
             }
-        } finally {
-            await client.close();
+        } catch (err) {
+            console.log(err);
         }
     }
-
-    return run().catch(console.dir);
+    return run();
 }
 module.exports.deleteEventById = deleteEventById;

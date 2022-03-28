@@ -15,7 +15,8 @@ cancelButton.addEventListener('click', () => {
 })
 
 
-// Here inputs are populated with the current event values
+// The code below populates edit-inputs with the current event values
+
 const eventNameIn = document.getElementById("name-in");
 const startDateTimeIn = document.getElementById("start-datetime-in");
 const endDateTimeIn = document.getElementById("end-datetime-in");
@@ -23,6 +24,8 @@ const eventAddress1In = document.getElementById("address1-in");
 const eventPostcodeIn = document.getElementById("postcode-in");
 
 const eventName = document.getElementById("event-name").innerHTML;
+const startDateTime = document.getElementById("start-date-time");
+const endDateTime = document.getElementById("end-date-time");
 const fullAddressArray = document.getElementById("event-address-full").innerHTML.split(", ");
 const eventAddress1 = fullAddressArray[0];
 const eventPostcode = fullAddressArray[1];
@@ -31,10 +34,11 @@ const eventPostcode = fullAddressArray[1];
 eventNameIn.defaultValue = eventName;
 eventAddress1In.defaultValue = eventAddress1;
 eventPostcodeIn.defaultValue = eventPostcode;
-// Some formatting is required for the dateTimeLocal defaultValue
+
+// handles formatting for the dateTimeLocal defaultValue
 const dateTimeToDefaultValue = (dateTimeIn) => {
 
-    dateTimeArray = dateTimeIn.innerHTML.split(', ');
+    dateTimeArray = dateTimeIn.split(', ');
     const timeString = dateTimeArray[0];
     const dateString = dateTimeArray[1];
 
@@ -44,8 +48,9 @@ const dateTimeToDefaultValue = (dateTimeIn) => {
             dateArray[i] = '0' + dateArray[i];
         }
     }
-    
+    console.log(dateArray[2] + '-' + dateArray[1] + '-' + dateArray[0] + 'T' + timeString);
     return dateArray[2] + '-' + dateArray[1] + '-' + dateArray[0] + 'T' + timeString;
 }
-startDateTimeIn.defaultValue = dateTimeToDefaultValue(startDateTimeIn.innerHTML);
-endDateTimeIn.defaultValue = dateTimeToDefaultValue(endDateTimeIn.innerHTML);
+
+startDateTimeIn.defaultValue = dateTimeToDefaultValue(startDateTime.innerHTML);
+endDateTimeIn.defaultValue = dateTimeToDefaultValue(endDateTime.innerHTML);

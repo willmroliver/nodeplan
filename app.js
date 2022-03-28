@@ -11,7 +11,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
-var events = [];
 
 // Renders the home page
 app.get('/', (req, res) => {
@@ -30,30 +29,39 @@ app.get('/my-plan', (req, res) => {
 })
 
 // Renders a calender for the month showing the user's events
-app.get('/my-plan/:year/:month', (req, res) => {
+app.get('/my-plan/:year/:month', async (req, res) => {
 
     const year = parseInt(req.params.year);
     const month = parseInt(dateHandler.getMonthNumber(req.params.month));
     const startingIndex = dateHandler.getStartingIndex(year, month);
 
-    fetchEventsByMonthAndRender(res, 'viewplan', year, month, startingIndex);
+    const events = await eventHandler.retrieveEventsByMonth(year, month);
+
+    res.render('viewplan', {
+        events: events, 
+        year: year, 
+        month: month,
+        startingIndex: startingIndex
+    });
 })
 
 // Renders the full-details page of a particular event
-app.get('/my-plan/:year/:month/:event', (req, res) => {
+app.get('/my-plan/:year/:month/:event', async (req, res) => {
 
     const year = parseInt(req.params.year);
     const month = parseInt(dateHandler.getMonthNumber(req.params.month));
     const eventName = req.params.event;
 
-    fetchEventAndRender(res, 'viewevent', year, month, eventName);
+    const event = await eventHandler.retrieveEvent(year, month, eventName);
+    
+    res.render('viewevent', {event: event});
 })
 
-app.get('/event-removed/:eventid', (req, res) => {
+app.get('/event-removed/:eventid', async (req, res) => {
 
     const eventId = req.params.eventid;
-    
-    deleteEventAndRender(res, 'deleteresult', eventId);
+    const result =  await deleteEventById(eventId);
+    res.render('deleteresult', {result: result});
 })
 
 // Renders a page to add new events
@@ -72,51 +80,21 @@ app.post('/add-event', (req, res) => {
 })
 
 // Handles event edits
-app.post('/edit-event/:eventid', (req, res) => {
+app.post('/edit-event/:eventid', async (req, res) => {
 
-    const newEvent = eventHandler.createEventObject(req.body);
-    
+    const newEvent = eventHandler.createEventObject(req.body); 
     const eventId = req.params.eventid;
-    editEventAndRender(res, 'viewevent', eventId, newEvent);
-})
 
-// For CALENDER.EJS
-const fetchEventsByMonthAndRender = async (res, ejsfilename, year, month, startingIndex) => {
+    await eventHandler.replaceEventById(eventId, newEvent);
 
-    events = await eventHandler.retrieveEventsByMonth(year, month);
-
-    res.render(ejsfilename, {
-        events: events, 
-        year: year, 
-        month: month,
-        startingIndex: startingIndex
-    });
-}
-
-// For VIEWEVENT.EJS
-const fetchEventAndRender = async (res, ejsfilename, year, month, eventName) => {
-
-    const thisEvent = await eventHandler.retrieveEvent(year, month, eventName);
-    res.render(ejsfilename, {event: thisEvent});
-}
-
-const editEventAndRender = async (res, ejsfilename, eventId, newEvent) => {
-
-    const thisEvent = await eventHandler.replaceEventById(eventId, newEvent);
-    const year = thisEvent.eventDateTime.year;
-    const month = thisEvent.eventDateTime.month;
-    const eventName = thisEvent.eventName;
+    const year = newEvent.startDateTime.year;
+    const month = newEvent.startDateTime.month;
+    const eventName = newEvent.eventName;
     const route = '/my-plan/' + year + '/' + dateHandler.getMonthString(month) + '/' + eventName;
     res.redirect(route);
-}
+})
 
-// For DELETERESULT.EJS
-const deleteEventAndRender = async (res, ejsfilename, eventId) => {
 
-    const result =  await deleteEventById(eventId);
-
-    res.render(ejsfilename, {result: result});
-}
 
 app.listen(process.env.PORT || 3000, () => {
     console.log('Listening');
