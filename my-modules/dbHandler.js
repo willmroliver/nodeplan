@@ -1,13 +1,15 @@
-const { MongoClient, ObjectId } = require('mongodb');
 const dotenv = require('dotenv');
+dotenv.config();
+
+const { MongoClient, ObjectId } = require('mongodb');
 const dateHandler = require(__dirname + '/dateHandler.js');
 
-dotenv.config();
 const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri);
 
 const dbName = 'nodePlanDB';
-const defaultCollection = 'events';
+const eventsCollection = 'events';
+const usersCollection = 'users';
 
 
 
@@ -38,9 +40,82 @@ const createEventObject = (reqBody) => {
 }
 module.exports.createEventObject = createEventObject;
 
+// Create a properly formatted User Account Object from req.body data
+const createAccountObject = (reqBody) => {
+
+    const newAccount = {
+        username: reqBody.username,
+        email: reqBody.email,
+        password: reqBody.password
+    }
+
+    return newAccount;
+}
+module.exports.createAccountObject = createAccountObject;
 
 
-// CRUD FUNCTIONS
+// USER ACCOUNT CRUD FUNCTIONS
+
+// Find an account in the DB by email; Returns null if no account is found;
+const findOneAccount = (email) => {
+
+    async function run() {
+        try {
+            const database = client.db(dbName);
+            const users = database.collection(usersCollection);
+
+            const account = await users.findOne(
+                { email: email }
+            );
+
+            return account;
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    return run();
+}
+module.exports.findOneAccount = findOneAccount;
+
+
+// Create a new account and insert into the DB; returns null if the account already exists
+const insertAccount = (newAccount) => {
+
+    async function run() {
+        try {
+            const database = client.db(dbName);
+            const users = database.collection(usersCollection);
+
+            const newUsername = newAccount.username;
+            const newEmail = newAccount.email;
+            const newPassword = newAccount.password;
+
+            // If null, account does not already exist so can be created
+            if (await findOneAccount(newUsername) === null) {
+
+                const doc = {
+                    username: newUsername,
+                    email: newEmail,
+                    password: newPassword
+                }
+    
+                const result = await users.insertOne(doc);
+                return result;
+
+            } else {
+                return null;
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    return run();
+}
+module.exports.insertAccount = insertAccount;
+
+
+
+// EVENT CRUD FUNCTIONS
 
 // Insert an event into the DB
 const insertEvent = (newEvent) => {
@@ -48,7 +123,7 @@ const insertEvent = (newEvent) => {
     async function run() {
         try {
             const database = client.db(dbName);
-            const events = database.collection(defaultCollection);
+            const events = database.collection(eventsCollection);
 
             // create a document to insert
             const doc = newEvent;
@@ -71,7 +146,7 @@ const retrieveEventsByMonth = (year, month) => {
     async function run() {
         try {
             const database = client.db(dbName);
-            const events = database.collection(defaultCollection);
+            const events = database.collection(eventsCollection);
 
             const eventsCursor = events.find(
                 {
@@ -98,7 +173,7 @@ const retrieveEvent = (year, month, eventName) => {
     async function run() {
         try {
             const database = client.db(dbName);
-            const events = database.collection(defaultCollection);
+            const events = database.collection(eventsCollection);
 
             const event = await events.findOne(
                 {
@@ -124,7 +199,7 @@ const retrieveAllEvents = () => {
     async function run() {
         try {
             const database = client.db(dbName);
-            const events = database.collection(defaultCollection);
+            const events = database.collection(eventsCollection);
 
             const eventsCursor = events.find({});
 
@@ -145,7 +220,7 @@ const replaceEventById = (eventId, newEvent) => {
     async function run() {
         try {
             const database = client.db(dbName);
-            const events = database.collection(defaultCollection);
+            const events = database.collection(eventsCollection);
 
             const result = await events.findOneAndReplace(
                 {'_id': ObjectId(eventId) },
@@ -168,7 +243,7 @@ const deleteEventById = (eventId) => {
     async function run() {
         try {
             const database = client.db(dbName);
-            const events = database.collection(defaultCollection);
+            const events = database.collection(eventsCollection);
 
             const result = await events.deleteOne(
                 { '_id': ObjectId(eventId) }

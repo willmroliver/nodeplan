@@ -418,3 +418,16 @@ a.calendar-prev, a.calendar-next {
         width: 80%;
     }
 }
+
+/* LOGIN */
+.login-wrapper {
+    margin: 100px auto;
+    text-align: center;
+    width: 300px;
+}
+
+@media only screen and (max-width: 325px) {
+    .login-wrapper {
+        width: 100%;
+    }
+}

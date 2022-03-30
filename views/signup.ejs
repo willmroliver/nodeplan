@@ -1,0 +1,28 @@
+<%- include('partials/no-nav-header') %>
+
+<div class="login-wrapper">
+
+    <form action="/" method="post" class="form-signin">
+
+        <i class="fa-solid fa-calendar-days fa-5x"></i>
+        <h1 class="h3 mb-3 font-weight-normal">Create your account</h1>
+
+        <label for="inputUsername" class="sr-only">Username</label>
+        <input name="username" id="inputUsername" class="form-control" placeholder="Name" required="" autofocus="">
+        
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input name="email" type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+        
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+
+        <label for="inputPasswordCheck" class="sr-only">Password</label>
+        <input name="passwordCheck" type="password" id="inputPasswordCheck" class="form-control" placeholder="Re-enter Password" required="">
+        
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+    
+    </form>
+
+</div>
+
+<%- include('partials/footer') %>

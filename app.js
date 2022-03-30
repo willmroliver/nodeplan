@@ -1,9 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { deleteEventById } = require('./my-modules/eventHandler');
 
 const dateHandler = require(__dirname + '/my-modules/dateHandler.js');
-const eventHandler = require(__dirname + '/my-modules/eventHandler.js');
+const dbHandler = require(__dirname + '/my-modules/dbHandler.js');
 
 const app = express();
 
@@ -12,10 +11,67 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
 
-// Renders the home page
-app.get('/', (req, res) => {
+app.get('/start', (req, res) => {
 
-    res.render('index', {});
+    res.render('start', {});
+})
+
+// accountExists boolean determines whether client has tried to create account with an existing username.
+// If accountExists = true, the page is loaded with the appropriate error message.
+app.route('/signup').get((req, res) => {
+    res.render('signup', {accountExists: false});
+
+}).post((req, res) => {
+    const reqBody = req.body;
+    
+})
+
+// loginSuccessful boolean determines whether client has tried to create account with an existing username.
+// If loginSuccessful = false, the page is loaded with the appropriate error message.
+app.get('/login', (req, res) => {
+
+    res.render('login', {loginSuccessful: true});
+})
+app.get('/login/retry', (req, res) => {
+
+    res.render('login', {loginSuccessful: false});
+})
+
+
+// Renders the home page
+app.route('/').get((req, res) => {
+
+    console.log(req);
+
+    res.redirect('/start');
+
+}).post(async (req, res) => {
+    const reqBody = req.body;
+
+    if ('passwordCheck' in reqBody) { // True only when POST request is coming from 'signup'; Prompts account creation
+
+        const newAccount = dbHandler.createAccountObject(reqBody);
+
+        // If account exists, insertAccount() returns null
+        const result = await dbHandler.insertAccount(newAccount);
+        if (result !== null) {
+            res.render('index', {userAccount: newAccount});
+        } else {
+            res.render('signup', {accountExists: true});
+        }
+
+    } else {    // Otherwise the POST request is coming from 'login' 
+
+        const accountFromUser = dbHandler.createAccountObject(reqBody);
+        const accountInDB = await dbHandler.findOneAccount(accountFromUser.email);
+
+        // If account does not exist, accountInDB === null, so IF condition will fail;
+        if (accountFromUser.password === accountInDB.password) { // CURRENTLY INSECURE; HASHING NEEDS IMPLEMENTING
+            res.render('index', {userAccount: accountInDB});
+        } else {
+            res.redirect('/login/retry');
+        }
+    } 
 })
 
 // Renders the calendar for the current day and month
@@ -35,7 +91,7 @@ app.get('/my-plan/:year/:month', async (req, res) => {
     const month = parseInt(dateHandler.getMonthNumber(req.params.month));
     const startingIndex = dateHandler.getStartingIndex(year, month);
 
-    const events = await eventHandler.retrieveEventsByMonth(year, month);
+    const events = await dbHandler.retrieveEventsByMonth(year, month);
 
     res.render('viewplan', {
         events: events, 
@@ -52,7 +108,7 @@ app.get('/my-plan/:year/:month/:event', async (req, res) => {
     const month = parseInt(dateHandler.getMonthNumber(req.params.month));
     const eventName = req.params.event;
 
-    const event = await eventHandler.retrieveEvent(year, month, eventName);
+    const event = await dbHandler.retrieveEvent(year, month, eventName);
     
     res.render('viewevent', {event: event});
 })
@@ -73,19 +129,19 @@ app.get('/new-event', (req, res) => {
 // Handles the addition of a new event
 app.post('/add-event', (req, res) => {
     
-    const newEvent = eventHandler.createEventObject(req.body)
+    const newEvent = dbHandler.createEventObject(req.body)
 
-    eventHandler.insertEvent(newEvent);
+    dbHandler.insertEvent(newEvent);
     res.redirect('/new-event');
 })
 
 // Handles event edits
 app.post('/edit-event/:eventid', async (req, res) => {
 
-    const newEvent = eventHandler.createEventObject(req.body); 
+    const newEvent = dbHandler.createEventObject(req.body); 
     const eventId = req.params.eventid;
 
-    await eventHandler.replaceEventById(eventId, newEvent);
+    await dbHandler.replaceEventById(eventId, newEvent);
 
     const year = newEvent.startDateTime.year;
     const month = newEvent.startDateTime.month;
