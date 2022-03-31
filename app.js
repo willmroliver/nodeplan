@@ -1,19 +1,26 @@
+// NPM package initialization
 const express = require('express');
 const bodyParser = require('body-parser');
 
+// Local module initialization
 const dateHandler = require(__dirname + '/my-modules/dateHandler.js');
 const dbHandler = require(__dirname + '/my-modules/dbHandler.js');
 const encryptionHandler = require(__dirname + '/my-modules/encryptionHandler.js');
+const passportHandler = require(__dirname + '/my-modules/passportHandler.js');
 
+// Express.js app initialization
 const app = express();
-
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
+// Passport.js middleware for Express
+const passport = passportHandler.getPassport();
+app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get('/start', (req, res) => {
-
     res.render('start', {});
 })
 
@@ -22,29 +29,53 @@ app.get('/start', (req, res) => {
 app.route('/signup').get((req, res) => {
     res.render('signup', {accountExists: false});
 
-}).post((req, res) => {
+}).post(async (req, res) => {
     const reqBody = req.body;
-    
+
+    // If account exists, insertAccount() returns null
+    const result = await dbHandler.insertAccount(reqBody);
+
+    if (result !== null) {
+        const userAccount = await dbHandler.findOneAccount(reqBody.email);
+        res.render('index', {userAccount: userAccount});    // TODO
+
+    } else {
+        res.render('signup', {accountExists: true});
+    }
 })
 
 // loginSuccessful boolean determines whether client has tried to create account with an existing username.
 // If loginSuccessful = false, the page is loaded with the appropriate error message.
 app.get('/login', (req, res) => {
 
-    res.render('login', {loginSuccessful: true});
+    if (req.user !== undefined) {   // True when already logged in with passport.js
+        res.redirect('/');
+    } else {
+        res.render('login', {loginSuccessful: true});
+    }
 })
 app.get('/login/retry', (req, res) => {
-
     res.render('login', {loginSuccessful: false});
 })
 
 
 // Renders the home page
+// Uses passport.js to authenticate login; see passportHandler.js
 app.route('/').get((req, res) => {
 
-    res.redirect('/start');
+    if (req.user !== undefined) {
+        res.render('index', {userAccount: req.user});
 
-}).post(async (req, res) => {
+    } else {
+        res.redirect('/start');
+    }
+}).post(passport.authenticate('local', { failureRedirect: '/start', failureMessage: true }), (req, res) => {
+    res.render('index', {userAccount: req.user});
+});
+
+/* 
+
+async (req, res) => {
     const reqBody = req.body;
 
     if ('passwordCheck' in reqBody) { // True only when POST request is coming from 'signup'; Prompts account creation
@@ -74,7 +105,9 @@ app.route('/').get((req, res) => {
             res.redirect('/login/retry');
         }
     } 
-})
+}
+
+*/
 
 // Renders the calendar for the current day and month
 app.get('/my-plan', (req, res) => {

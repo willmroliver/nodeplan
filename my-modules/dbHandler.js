@@ -73,6 +73,7 @@ const findOneAccount = (email) => {
             return account;
         } catch (err) {
             console.log(err);
+            throw err;
         }
     }
     return run();
