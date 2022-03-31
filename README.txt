@@ -17,13 +17,11 @@ Development began 28/02/2022; current user features are:
 
 --- LATEST COMMIT DETAILS ---
 
-    - Added user account creation and sign-in.
-    - Added password security: SHA-256 hashing with 10 rounds of 256-bit salting.
+    - Passport.js for user sessions! Cookies now used to keep account logged in.
 
 
 --- TODO ---
 
 The next immediate features to be added will be:
-    - Implement cookies to maintain user login sessions.
     - Make sensible restrictions to INSERTing new events (to avoid name-time clashes, etc.).
     - Improve Look and Feel with further CSS formatting (very little styling has been done, focus is on functionality).
