@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 
 const dateHandler = require(__dirname + '/my-modules/dateHandler.js');
 const dbHandler = require(__dirname + '/my-modules/dbHandler.js');
+const encryptionHandler = require(__dirname + '/my-modules/encryptionHandler.js');
 
 const app = express();
 
@@ -41,8 +42,6 @@ app.get('/login/retry', (req, res) => {
 // Renders the home page
 app.route('/').get((req, res) => {
 
-    console.log(req);
-
     res.redirect('/start');
 
 }).post(async (req, res) => {
@@ -50,23 +49,26 @@ app.route('/').get((req, res) => {
 
     if ('passwordCheck' in reqBody) { // True only when POST request is coming from 'signup'; Prompts account creation
 
-        const newAccount = dbHandler.createAccountObject(reqBody);
-
         // If account exists, insertAccount() returns null
-        const result = await dbHandler.insertAccount(newAccount);
+        const result = await dbHandler.insertAccount(reqBody);
         if (result !== null) {
-            res.render('index', {userAccount: newAccount});
+            const userAccount = await dbHandler.findOneAccount(reqBody.email);
+            res.render('index', {userAccount: userAccount});
         } else {
             res.render('signup', {accountExists: true});
         }
 
     } else {    // Otherwise the POST request is coming from 'login' 
 
-        const accountFromUser = dbHandler.createAccountObject(reqBody);
-        const accountInDB = await dbHandler.findOneAccount(accountFromUser.email);
+        const email = reqBody.email;
+        const accountInDB = await dbHandler.findOneAccount(email);
+        
+        const hashedPassword = accountInDB.passwordData.password;
+        const salts = accountInDB.passwordData.salts;
 
-        // If account does not exist, accountInDB === null, so IF condition will fail;
-        if (accountFromUser.password === accountInDB.password) { // CURRENTLY INSECURE; HASHING NEEDS IMPLEMENTING
+        // If account does not exist, IF condition will fail;
+        // Compares the salted hashed user input with the known hash result in the DB
+        if (encryptionHandler.checkPassword(reqBody.password, salts) === hashedPassword) {
             res.render('index', {userAccount: accountInDB});
         } else {
             res.redirect('/login/retry');

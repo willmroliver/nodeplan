@@ -81,7 +81,7 @@ p {
 }
 .calendar-wrapper {
     display: block;
-    padding: 25px 18% 10px;
+    padding: 0 18%;
     grid-area: calendar;
 }
 .calendar-next {
@@ -249,13 +249,13 @@ a.calendar-prev, a.calendar-next {
 
 @media only screen and (min-width: 990px) {
     .calendar-wrapper {
-        padding: 25px 21%;
+        padding: 0 21%;
     }
 }
 
 @media only screen and (max-width: 990px) {
     .calendar-wrapper {
-        padding: 25px 20%;
+        padding: 0 20%;
     }
     .event-name {
         font-size: 0.8rem;
@@ -264,7 +264,7 @@ a.calendar-prev, a.calendar-next {
 
 @media only screen and (max-width: 850px) {
     .calendar-wrapper {
-        padding: 25px 10%;
+        padding: 0 10%;
     }
     .event-name {
         font-size: 0.8rem;
@@ -424,6 +424,12 @@ a.calendar-prev, a.calendar-next {
     margin: 100px auto;
     text-align: center;
     width: 300px;
+}
+
+@media only screen and (max-width: 400px) {
+    .login-wrapper {
+        padding-top: 40%;
+    }
 }
 
 @media only screen and (max-width: 325px) {

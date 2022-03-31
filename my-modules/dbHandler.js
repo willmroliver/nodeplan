@@ -3,6 +3,7 @@ dotenv.config();
 
 const { MongoClient, ObjectId } = require('mongodb');
 const dateHandler = require(__dirname + '/dateHandler.js');
+const encryptionHandler = require(__dirname + '/encryptionHandler.js');
 
 const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri);
@@ -41,17 +42,18 @@ const createEventObject = (reqBody) => {
 module.exports.createEventObject = createEventObject;
 
 // Create a properly formatted User Account Object from req.body data
+// ONLY TO BE USED FOR insertAccount() as new salt values in passwordData are returned every call
+// See encryptionHandler.js
 const createAccountObject = (reqBody) => {
 
     const newAccount = {
         username: reqBody.username,
         email: reqBody.email,
-        password: reqBody.password
+        passwordData: encryptionHandler.getPasswordHashData(reqBody.password)
     }
 
     return newAccount;
 }
-module.exports.createAccountObject = createAccountObject;
 
 
 // USER ACCOUNT CRUD FUNCTIONS
@@ -79,25 +81,19 @@ module.exports.findOneAccount = findOneAccount;
 
 
 // Create a new account and insert into the DB; returns null if the account already exists
-const insertAccount = (newAccount) => {
+const insertAccount = (reqBody) => {
 
     async function run() {
         try {
             const database = client.db(dbName);
             const users = database.collection(usersCollection);
 
-            const newUsername = newAccount.username;
-            const newEmail = newAccount.email;
-            const newPassword = newAccount.password;
+            const account = createAccountObject(reqBody);
 
             // If null, account does not already exist so can be created
-            if (await findOneAccount(newUsername) === null) {
+            if (await findOneAccount(account.username) === null) {
 
-                const doc = {
-                    username: newUsername,
-                    email: newEmail,
-                    password: newPassword
-                }
+                const doc = account;
     
                 const result = await users.insertOne(doc);
                 return result;
