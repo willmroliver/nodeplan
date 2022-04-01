@@ -37,7 +37,10 @@ p {
 .nav-custom {
     padding: 0;
 }
-
+.log-out-btn {
+    background: none;
+    border: none;
+}
 
 /* ADDEVENT */
 .add-event {

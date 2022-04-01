@@ -28,7 +28,7 @@ const connectToMongoDB = async () => {
 connectToMongoDB();
 
 // Create a properly formatted Event Object from req.body data
-const createEventObject = (reqBody) => {
+const createEventObject = (reqBody, userID) => {
 
     const newEvent = reqBody;
 
@@ -36,6 +36,7 @@ const createEventObject = (reqBody) => {
     const endDateTimeObject = dateHandler.getDateInfo(reqBody.endDateTime);
     newEvent['startDateTime'] = startDateTimeObject;
     newEvent['endDateTime'] = endDateTimeObject;
+    newEvent['userID'] = ObjectId(userID);
 
     return newEvent;
 }
@@ -54,6 +55,7 @@ const createAccountObject = (reqBody) => {
 
     return newAccount;
 }
+
 
 
 // USER ACCOUNT CRUD FUNCTIONS
@@ -115,7 +117,9 @@ module.exports.insertAccount = insertAccount;
 // EVENT CRUD FUNCTIONS
 
 // Insert an event into the DB
-const insertEvent = (newEvent) => {
+const insertEvent = (reqBody, userID) => {
+
+    const newEvent = createEventObject(reqBody, userID);
 
     async function run() {
         try {
@@ -136,9 +140,9 @@ const insertEvent = (newEvent) => {
 module.exports.insertEvent = insertEvent;
 
 
-// Retrieve the events of a given year and month;
+// Retrieve the user's events of a given year and month;
 // Preferable to retrieveEvents when rendering calendar;
-const retrieveEventsByMonth = (year, month) => {
+const retrieveEventsByMonth = (year, month, user) => {
 
     async function run() {
         try {
@@ -147,8 +151,9 @@ const retrieveEventsByMonth = (year, month) => {
 
             const eventsCursor = events.find(
                 {
-                    'startDateTime.year': { $eq: year } ,
-                    'startDateTime.month': { $eq: month } 
+                    'startDateTime.year': { $eq: year },
+                    'startDateTime.month': { $eq: month },
+                    'userID': { $eq: ObjectId(user._id) }
                 }
             );
 
@@ -164,8 +169,8 @@ const retrieveEventsByMonth = (year, month) => {
 module.exports.retrieveEventsByMonth = retrieveEventsByMonth;
 
 
-// Will be over-ridden in future to allow for custom event requests
-const retrieveEvent = (year, month, eventName) => {
+// Needs updating for greater user flexibility; currently constrains to unique event names in a given month
+const retrieveEvent = (year, month, eventName, user) => {
 
     async function run() {
         try {
@@ -176,7 +181,8 @@ const retrieveEvent = (year, month, eventName) => {
                 {
                     'startDateTime.year': { $eq: year } ,
                     'startDateTime.month': { $eq: month },
-                    'eventName': { $eq: eventName } 
+                    'eventName': { $eq: eventName },
+                    'userID': { $eq: ObjectId(user._id) }  
                 }
             );
 
@@ -190,15 +196,17 @@ const retrieveEvent = (year, month, eventName) => {
 module.exports.retrieveEvent = retrieveEvent;
 
 
-// Retrieves ALL events
-const retrieveAllEvents = () => {
+// Retrieves ALL a user's events
+const retrieveAllEvents = (user) => {
 
     async function run() {
         try {
             const database = client.db(dbName);
             const events = database.collection(eventsCollection);
 
-            const eventsCursor = events.find({});
+            const eventsCursor = events.find({
+                'userID': { $eq: ObjectId(user._id) } 
+            });
 
             const eventsArray = await eventsCursor.toArray();
 
