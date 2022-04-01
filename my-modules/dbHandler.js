@@ -94,7 +94,7 @@ const insertAccount = (reqBody) => {
             const account = createAccountObject(reqBody);
 
             // If null, account does not already exist so can be created
-            if (await findOneAccount(account.username) === null) {
+            if (await findOneAccount(account.email) === null) {
 
                 const doc = account;
     

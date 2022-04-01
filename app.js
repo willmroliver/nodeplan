@@ -25,8 +25,8 @@ app.get('/start', (req, res) => {
     res.render('start', {});
 })
 
-// accountExists boolean determines whether client has tried to create account with an existing username.
-// If accountExists = true, the page is loaded with the appropriate error message.
+// If accountExists = true, user has entered an email for an existing account.
+// If accountExists = null, re-enter password and password do not match.
 app.route('/signup')
 .get((req, res) => {
     res.render('signup', {accountExists: false});
@@ -34,15 +34,23 @@ app.route('/signup')
 .post(async (req, res) => {
     const reqBody = req.body;
 
-    // If account exists, insertAccount() returns null
-    const result = await dbHandler.insertAccount(reqBody);
-
-    if (result !== null) {
-        res.redirect(307, '/');
+    if (reqBody.password !== reqBody.passwordCheck) {
+        res.render('signup', {accountExists: null});
 
     } else {
-        res.render('signup', {accountExists: true});
+        // If account exists, insertAccount() returns null
+        const result = await dbHandler.insertAccount(reqBody);
+        console.log(result);
+
+        if (result !== null) {
+            res.redirect(307, '/');
+
+        } else {
+            res.render('signup', {accountExists: true});
+        }
     }
+
+    
 })
 
 // loginSuccessful boolean determines whether client has tried to create account with an existing username.
