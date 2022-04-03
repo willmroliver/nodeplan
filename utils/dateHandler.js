@@ -1,54 +1,30 @@
-// This function is specifically to handle date strings formatted as given by HTML datetime-local inputs
-const getDateInfo = (dateString) => {
+// Converts HTML DateTime Outputs into JavaScript Date() objects
+const getDateObject = (dateTimeHTML) => {
+    return new Date(dateTimeHTML);
+}
+module.exports.getDateObject = getDateObject;
 
-    const time = dateString.split('T')[1].substring(0, 5);
+// Returns a time string of format HH:MM for user display info
+const getTimeString = (dateTimeHTML) => {
+    return dateTimeHTML.split('T')[1].substring(0, 5);
+}
+module.exports.getTimeString = getTimeString
 
-    const theDate = new Date(dateString);
-    const dayNo = theDate.getDay();
-
-    var day = "";
-
-    switch (dayNo) {
-        case 0:
-            day = 'Sunday';
-            break;
-        case 1:
-            day = 'Monday';
-            break;
-        case 2:
-            day = 'Tuesday'; 
-            break;
-        case 3:
-            day = 'Wednesday';
-            break;
-        case 4:
-            day = 'Thursday';
-            break;
-        case 5:
-            day = 'Friday';
-            break;
-        case 6:
-            day = 'Saturday'
-            break;
-        default:
-            day = 'Sunday';
-    }
-
-    const date = theDate.getDate();
-    const month = theDate.getMonth();
-    const year = theDate.getFullYear();
-
+// Returns a DateTimeObject formatted for DB storage
+const getDateTimeSaveInfo = (dateTimeHTML) => {
+    const dateObject = getDateObject(dateTimeHTML);
+    const timeString = getTimeString(dateTimeHTML);
     return {
-        'time': time,
-        'day': day,
-        'date': date,
-        'month': month,
-        'year': year
+        time: timeString,
+        day: getDayString(dateObject.getDay()),
+        date: dateObject.getDate(),
+        month: dateObject.getMonth(),
+        year: dateObject.getFullYear()
     }
 }
-module.exports.getDateInfo = getDateInfo;
+module.exports.getDateTimeSaveInfo = getDateTimeSaveInfo
 
-// Specifically converts 0-11 from JS Date() object into name string for Route Parameter
+// For route parameters
 const getMonthString = (monthNumber) => {
 
     switch (monthNumber) {
@@ -111,6 +87,38 @@ const getMonthNumber = (monthString) => {
     }
 }  
 module.exports.getMonthNumber = getMonthNumber;
+
+// 0-6 >> Mon - Sun
+const getDayString = (dayNumber) => {
+    var day = "";
+    switch (dayNumber) {
+        case 0:
+            day = 'Sunday';
+            break;
+        case 1:
+            day = 'Monday';
+            break;
+        case 2:
+            day = 'Tuesday'; 
+            break;
+        case 3:
+            day = 'Wednesday';
+            break;
+        case 4:
+            day = 'Thursday';
+            break;
+        case 5:
+            day = 'Friday';
+            break;
+        case 6:
+            day = 'Saturday'
+            break;
+        default:
+            day = 'Sunday';
+    }
+    return day;
+}
+module.exports.getDayString = getDayString;
 
 // Gets starting index for event-placement in calendar cells (see CALENDAR.JS - const startingIndex)
 const getStartingIndex = (year, month) => {

@@ -2,8 +2,8 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const { MongoClient, ObjectId } = require('mongodb');
-const dateHandler = require(__dirname + '/dateHandler.js');
-const encryptionHandler = require(__dirname + '/encryptionHandler.js');
+const dateHandler = require('./dateHandler.js');
+const encryptionHandler = require('./encryptionHandler.js');
 
 const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri);
@@ -29,11 +29,10 @@ connectToMongoDB();
 
 // Create a properly formatted Event Object from req.body data
 const createEventObject = (reqBody, userID) => {
-
     const newEvent = reqBody;
 
-    const startDateTimeObject = dateHandler.getDateInfo(reqBody.startDateTime);
-    const endDateTimeObject = dateHandler.getDateInfo(reqBody.endDateTime);
+    const startDateTimeObject = dateHandler.getDateTimeSaveInfo(reqBody.startDateTime);
+    const endDateTimeObject = dateHandler.getDateTimeSaveInfo(reqBody.endDateTime);
     newEvent['startDateTime'] = startDateTimeObject;
     newEvent['endDateTime'] = endDateTimeObject;
     newEvent['userID'] = ObjectId(userID);
@@ -46,7 +45,6 @@ module.exports.createEventObject = createEventObject;
 // ONLY TO BE USED FOR insertAccount() as new salt values in passwordData are returned every call
 // See encryptionHandler.js
 const createAccountObject = (reqBody) => {
-
     const newAccount = {
         username: reqBody.username,
         email: reqBody.email,
