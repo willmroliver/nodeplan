@@ -138,7 +138,8 @@ module.exports.getEvent = getEvent;
 const removeEvent = async (req, res) => {
     if (req.user !== undefined) {
         const eventId = req.params.eventid;
-        const result =  await deleteEventById(eventId);
+        const result =  await dbHandler.deleteEventById(eventId);
+
         res.render('deleteresult', {result: result});
 
     } else {
