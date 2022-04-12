@@ -1,0 +1,60 @@
+<%- include('partials/header') %>
+
+<h1>Your Account</h1>
+
+<% if (!user.email) { %>
+    <p>Because you are using Google Authentication to login, your account does not yet have a password set.<br>
+        If you would like to login without using this service, click below.<br><br>
+        Please note; whilst great care has been taken to ensure the safety of sensitive information,<br>
+        your data might be more secure using Google Authentication.<br><br>
+    </p>
+    <button id="addGoogleAuth" class="btn btn-secondary">Add Login Credentials</button>
+<% } else if (!user.googleID) { %>
+    <p>Your account is not associated with a Google Account. If you would like to login via Google, click below.</p>
+
+    <div class="account-btn-wrapper">
+        <a href="account/auth/google" class="btn btn-lg btn-primary btn-block">
+            <i class="fa-brands fa-google"></i> Sign in with Google
+        </a>
+        <button id="updateAccount" class="btn btn-secondary btn-block">Update account details</button>
+    </div>
+<% } else { %> 
+    <button id="updateAccount" class="btn btn-secondary btn-block">Update account details</button>
+<% } %>
+
+<div id="updateAccountPopup" class="account-update-wrapper contents-hidden">
+
+    <form action="/account" method="post" class="form-signin">
+
+        <i class="fa-solid fa-calendar-days fa-3x"></i>
+        <h1 class="h3 mb-3 font-weight-normal">Create your account</h1>
+
+        <label for="inputUsername" class="sr-only">Username</label>
+        <input name="username" id="inputUsername" class="form-control" placeholder="Name" required="" autofocus="">
+        
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input name="email" type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+        
+        <button id="updateDetails" class="btn btn-md btn-primary btn-block" type="submit">Update details</button>
+        <button id="changePassword" class="btn btn-md btn-danger btn-block">Change password</button>
+        <button id="updateDetailsBack" class="btn btn-md btn-secondary btn-block">Back</button>
+
+    </form>
+
+    <form action="/account" method="post" class="form-signin contents-hidden">
+
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+
+        <label for="inputPasswordCheck" class="sr-only">Password</label>
+        <input name="passwordCheck" type="password" id="inputPasswordCheck" class="form-control" placeholder="Re-enter Password" required="">
+        
+        <button id="updatePassword" class="btn btn-md btn-primary btn-block" type="submit">Update password</button>
+        <button id="updatePasswordBack" class="btn btn-md btn-secondary btn-block">Back</button>
+    </form>
+
+</div>
+
+<script src="scripts/account.js"></script>
+
+<%- include('partials/footer') %>

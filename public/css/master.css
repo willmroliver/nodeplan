@@ -33,6 +33,18 @@ p {
     padding-right: 0;
 }
 
+@media only screen and (min-width: 992px) {
+    .dropdown-menu {
+        left: auto;
+        right: 0;
+    }
+}
+
+/* UTILITY */
+.contents-hidden {
+    display: none;
+}
+
 /* HEADER */
 .nav-custom {
     position: -webkit-sticky;
@@ -44,6 +56,9 @@ p {
 .log-out-btn {
     background: none;
     border: none;
+}
+button.log-out-btn {
+    padding-left: 0;
 }
 
 /* ADDEVENT */
@@ -341,7 +356,7 @@ a.calendar-prev, a.calendar-next {
 .event-info-wrapper {
     text-align: center;
 }
-.edit-event-popup {
+.edit-event-popup, #updateAccountPopup {
     background-color: white;
     border-radius: 25px;
     position: absolute;
@@ -358,9 +373,6 @@ a.calendar-prev, a.calendar-next {
 .popup-content input {
     padding: 5px 0;
     width: 70%;
-}
-.contents-hidden {
-    display: none;
 }
 .popup-background {
     background-color: rgba(120, 120, 120, 0.6);
@@ -442,5 +454,16 @@ a.calendar-prev, a.calendar-next {
 @media only screen and (max-width: 325px) {
     .login-wrapper {
         width: 100%;
+    }
+}
+
+/* ACCOUNT */
+.account-btn-wrapper {
+    margin: 20px 0;
+    width: 350px;
+}
+@media only screen and (min-width: 600px) {
+    .account-update-wrapper {
+        width: 400px;
     }
 }

@@ -42,7 +42,7 @@ const createEventObject = (reqBody, userID) => {
 module.exports.createEventObject = createEventObject;
 
 // Create a properly formatted User Account Object from req.body data
-// ONLY TO BE USED FOR insertAccount() as new salt values in passwordData are returned every call
+// ONLY TO BE USED FOR insertAccount() as new salt values are generated every call by getPasswordHashData()
 // See encryptionHandler.js
 const createAccountObject = (reqBody) => {
     const newAccount = {
@@ -50,26 +50,40 @@ const createAccountObject = (reqBody) => {
         email: reqBody.email,
         passwordData: encryptionHandler.getPasswordHashData(reqBody.password)
     }
-
+    return newAccount;
+}
+// Sister function to above for 'google' authType: See insertAccount() and passportHandler.js
+const createGoogleAccountObject = (profile) => {
+    const newAccount = {
+        username: profile.displayName,
+        googleID: profile.id
+    }
     return newAccount;
 }
 
-
-
 // USER ACCOUNT CRUD FUNCTIONS
 
-// Find an account in the DB by email; Returns null if no account is found;
-const findOneAccount = (email) => {
+// Find an account in the DB by authType (local searches by 'email', google by 'googleID', etc.);
+// Returns null if no account is found
+const findOneAccount = (authType, value) => {
 
     async function run() {
         try {
             const database = client.db(dbName);
             const users = database.collection(usersCollection);
 
-            const account = await users.findOne(
-                { email: email }
-            );
+            var account;
 
+            switch (authType) {
+                case 'local':  
+                    account = await users.findOne({ email: value });
+                    break;
+                case 'google':
+                    account = await users.findOne({ googleID: value });
+                    break;
+                default:
+                    throw new Error("Invalid Search Parameter");
+            }
             return account;
         } catch (err) {
             console.log(err);
@@ -82,17 +96,37 @@ module.exports.findOneAccount = findOneAccount;
 
 
 // Create a new account and insert into the DB; returns null if the account already exists
-const insertAccount = (reqBody) => {
+// 'authType' variable can currently be set to 'local', 'google', reflecting the currently supported Passport.js Strategies 
+const insertAccount = (reqBody, authType) => {
 
     async function run() {
         try {
             const database = client.db(dbName);
             const users = database.collection(usersCollection);
 
-            const account = createAccountObject(reqBody);
+            var account;
+            if (authType === 'google') {
+                account = createGoogleAccountObject(reqBody);
+            } else if (authType === 'local') {
+                account = createAccountObject(reqBody);
+            } else {
+                throw new Error("Invalid authType");
+            }
+
+            var findValue;
+            switch (authType) {
+                case 'local':
+                    findValue = account.email;
+                    break;
+                case 'google':
+                    findValue = account.googleID;
+                    break;
+                default:
+                    throw new Error("Invalid authType");
+            }
 
             // If null, account does not already exist so can be created
-            if (await findOneAccount(account.email) === null) {
+            if (await findOneAccount(authType, findValue) === null) {
 
                 const doc = account;
     
@@ -111,6 +145,40 @@ const insertAccount = (reqBody) => {
 module.exports.insertAccount = insertAccount;
 
 
+// For use with OAuth2.0.
+// First checks if an account is already associated with the Google/Facebook/etc. credentials,
+// If not, a new account is inserted and related to the Google/Facebook/etc. account.
+const findOneOrInsert = async (authType, profile) => {
+
+    try {
+        var findValue;
+
+        switch (authType) {
+            case 'google':
+                findValue = profile.id;
+                break;
+            default:
+                throw new Error('Invalid authType');
+        }
+
+        const user = await findOneAccount(authType, findValue);
+
+        if (user !== null) {
+            return user;
+        }
+        else if (user === null) {
+            const result = await insertAccount(profile, authType);
+            return await findOneAccount(authType, findValue);
+        } 
+        else {
+            return null;
+        }
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+module.exports.findOneOrInsert = findOneOrInsert;
 
 // EVENT CRUD FUNCTIONS
 

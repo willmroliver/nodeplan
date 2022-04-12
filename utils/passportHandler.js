@@ -4,6 +4,7 @@ const encryptionHandler = require(__dirname + '/encryptionHandler.js');
 
 // Passport.js Initialization/Configuration
 var LocalStrategy = require('passport-local');
+var GoogleStrategy = require('passport-google-oauth20');
 var passport = require('passport');
 
 passport.serializeUser(function(user, done) {
@@ -14,12 +15,14 @@ passport.deserializeUser(function(user, done) {
     done(null, user);
 });
 
-const strategy = new LocalStrategy({
+
+const localStrategy = new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
-}, async (email, password, done) => {
+}, 
+async (email, password, done) => {
     try {
-        const result = await dbHandler.findOneAccount(email);
+        const result = await dbHandler.findOneAccount('local', email);
 
         if (result === null) {  // True if dbHandler fails to find an account with the corresponding email
             return done(null, false, { message: "Email or Password Incorrect" });
@@ -40,7 +43,29 @@ const strategy = new LocalStrategy({
     }
 });
 
-passport.use(strategy);
+
+const googleStrategy = new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/auth/google/home"
+}, 
+async (accessToken, refreshToken, profile, done) => {
+    try {
+        const result = await dbHandler.findOneOrInsert('google', profile);
+
+        if (result === null) {
+            return done(null, false, { message: "Login Failed" });
+
+        } else {
+            return done(null, result);
+        }
+    } catch (err) {
+        return done(err);
+    }
+})
+
+passport.use(localStrategy);
+passport.use(googleStrategy);
 
 const getPassport = () => { return passport };
 module.exports.getPassport = getPassport;

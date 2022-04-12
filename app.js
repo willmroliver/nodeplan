@@ -37,6 +37,17 @@ app.route('/signup')
 app.get('/login', userRouting.getLoginPage)
 app.get('/login/retry', userRouting.getLoginRetry)
 
+// Handles Google OAuth2.0 login attempts
+app.get('/auth/google',
+    passport.authenticate('google', { scope: ['profile'] }),
+)
+app.get('/auth/google/home', 
+    passport.authenticate('google', { failureRedirect: '/start' }), (req, res) => {
+        // Successful authentication, redirect home.
+        res.redirect('/');
+    }
+)
+
 app.post('/logout', userRouting.logout)
 
 // Renders the home page
@@ -64,7 +75,9 @@ app.route('/add-event')
 // Handles event edits
 app.post('/edit-event/:eventid', userRouting.editEvent);
 
-
+// Renders account info/edit page
+app.route('/account')
+.get(userRouting.getAccount);
 
 app.listen(process.env.PORT || 3000, () => {
     console.log('Listening');

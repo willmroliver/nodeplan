@@ -18,7 +18,7 @@ const createAccount = async (req, res) => {
 
     } else {
         // If account exists, insertAccount() returns null
-        const result = await dbHandler.insertAccount(reqBody);
+        const result = await dbHandler.insertAccount(reqBody, 'local');
 
         if (result !== null) {
             res.redirect(307, '/');
@@ -34,7 +34,7 @@ module.exports.createAccount = createAccount;
 // ROUTE '/login'
 
 const getLoginPage = (req, res) => {
-    if (req.user !== undefined) {   // True when already logged in with passport.js
+    if (req.isAuthenticated()) {   // True when already logged in with passport.js
         res.redirect('/');
     } else {
         res.render('login', {loginSuccessful: true});
@@ -64,7 +64,7 @@ module.exports.logout = logout;
 // ROUTE '/'
 
 const getIndex = (req, res) => {
-    if (req.user !== undefined) {
+    if (req.isAuthenticated()) {
         res.render('index', {userAccount: req.user});
 
     } else {
@@ -77,14 +77,14 @@ module.exports.getIndex = getIndex;
 // ROUTE '/my-plan'
 
 const getMyPlanCurrent = (req, res) => {
-    if (req.user !== undefined) {
+    if (req.isAuthenticated()) {
         const today = new Date();
         const monthString = dateHandler.getMonthString(today.getMonth());
         const year = today.getFullYear();
 
         res.redirect('/my-plan/'+year+'/'+monthString);
     } else {
-        res.redirect('/login');
+        res.redirect('/start');
     }
 }
 module.exports.getMyPlanCurrent = getMyPlanCurrent;
@@ -93,7 +93,7 @@ module.exports.getMyPlanCurrent = getMyPlanCurrent;
 // ROUTE '/my-plan/:year/:month
 
 const getMyPlanByMonth = async (req, res) => {
-    if (req.user !== undefined) {
+    if (req.isAuthenticated()) {
         const year = parseInt(req.params.year);
         const month = parseInt(dateHandler.getMonthNumber(req.params.month));
 
@@ -109,7 +109,7 @@ const getMyPlanByMonth = async (req, res) => {
             startingIndex: startingIndex
         });
     } else {
-        res.redirect('/login');
+        res.redirect('/start');
     }
 }
 module.exports.getMyPlanByMonth = getMyPlanByMonth;
@@ -118,7 +118,7 @@ module.exports.getMyPlanByMonth = getMyPlanByMonth;
 // ROUTE '/my-plan/:year/:month/:event'
 
 const getEvent = async (req, res) => {
-    if (req.user !== undefined) {
+    if (req.isAuthenticated()) {
         const year = parseInt(req.params.year);
         const month = parseInt(dateHandler.getMonthNumber(req.params.month));
         const eventName = req.params.event;
@@ -127,7 +127,7 @@ const getEvent = async (req, res) => {
         res.render('viewevent', {event: event});
 
     } else {
-        res.redirect('/login');
+        res.redirect('/start');
     }
 }
 module.exports.getEvent = getEvent;
@@ -136,14 +136,14 @@ module.exports.getEvent = getEvent;
 // ROUTE '/event-removed/:eventid'
 
 const removeEvent = async (req, res) => {
-    if (req.user !== undefined) {
+    if (req.isAuthenticated()) {
         const eventId = req.params.eventid;
         const result =  await dbHandler.deleteEventById(eventId);
 
         res.render('deleteresult', {result: result});
 
     } else {
-        res.redirect('/login');
+        res.redirect('/start');
     }  
 }
 module.exports.removeEvent = removeEvent;
@@ -152,17 +152,17 @@ module.exports.removeEvent = removeEvent;
 // ROUTE '/add-event'
 
 const getAddEventForm = (req, res) => {
-    if (req.user !== undefined) {
+    if (req.isAuthenticated()) {
         res.render('addevent', {});
     } else {
-        res.redirect('/login');
+        res.redirect('/start');
     }
 }
 module.exports.getAddEventForm = getAddEventForm;
 
 
 const addEvent = async (req, res) => {
-    if (req.user !== undefined) {
+    if (req.isAuthenticated()) {
         const reqBody = req.body;
         await dbHandler.insertEvent(reqBody, req.user._id);
 
@@ -174,7 +174,7 @@ const addEvent = async (req, res) => {
         res.redirect('/my-plan/'+year+'/'+month+'/'+eventName);
 
     } else {
-        res.redirect('/login');
+        res.redirect('/start');
     }
     
 }
@@ -184,15 +184,34 @@ module.exports.addEvent = addEvent;
 // ROUTE '/edit-event/:eventid'
 
 const editEvent = async (req, res) => {
-    const newEvent = dbHandler.createEventObject(req.body, req.user._id); 
-    const eventId = req.params.eventid;
+    if (req.isAuthenticated()) {
+        const newEvent = dbHandler.createEventObject(req.body, req.user._id); 
+        const eventId = req.params.eventid;
 
-    await dbHandler.replaceEventById(eventId, newEvent);
+        await dbHandler.replaceEventById(eventId, newEvent);
 
-    const year = newEvent.startDateTime.year;
-    const month = newEvent.startDateTime.month;
-    const eventName = newEvent.eventName;
-    const route = '/my-plan/' + year + '/' + dateHandler.getMonthString(month) + '/' + eventName;
-    res.redirect(route);
+        const year = newEvent.startDateTime.year;
+        const month = newEvent.startDateTime.month;
+        const eventName = newEvent.eventName;
+        const route = '/my-plan/' + year + '/' + dateHandler.getMonthString(month) + '/' + eventName;
+        res.redirect(route);
+    } else {
+        res.redirect('/start');
+    }
 }
 module.exports.editEvent = editEvent;
+
+
+// ROUTE '/account'
+
+const getAccount = async (req, res) => {
+
+    if (req.isAuthenticated()) {
+        console.log(req.user);
+        res.render('account', {user: req.user});
+    } else {
+        res.redirect('/start');
+    }
+    
+}
+module.exports.getAccount = getAccount;
