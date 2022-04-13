@@ -47,7 +47,7 @@ async (email, password, done) => {
 const googleStrategy = new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "https:/nodeplan.herokuapp.com/auth/google/home"
+    callbackURL: "https://node-plan.herokuapp.com/auth/google/home"
 }, 
 async (accessToken, refreshToken, profile, done) => {
     try {
