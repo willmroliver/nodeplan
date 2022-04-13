@@ -8,18 +8,18 @@
         Please note; whilst great care has been taken to ensure the safety of sensitive information,<br>
         your data might be more secure using Google Authentication.<br><br>
     </p>
-    <button id="addGoogleAuth" class="btn btn-secondary">Add Login Credentials</button>
+    <button id="addGoogleAuth" class="btn btn-secondary" disabled>Add Login Credentials</button>
 <% } else if (!user.googleID) { %>
     <p>Your account is not associated with a Google Account. If you would like to login via Google, click below.</p>
 
     <div class="account-btn-wrapper">
-        <a href="account/auth/google" class="btn btn-lg btn-primary btn-block">
+        <a id="linkGoogle" href="" class="btn btn-lg btn-primary btn-block">
             <i class="fa-brands fa-google"></i> Sign in with Google
         </a>
         <button id="updateAccount" class="btn btn-secondary btn-block">Update account details</button>
     </div>
 <% } else { %> 
-    <button id="updateAccount" class="btn btn-secondary btn-block">Update account details</button>
+    <button id="updateAccount" class="btn btn-secondary">Update account details</button>
 <% } %>
 
 <div id="updateAccountPopup" class="account-update-wrapper contents-hidden">
@@ -27,7 +27,6 @@
     <form action="/account" method="post" class="form-signin">
 
         <i class="fa-solid fa-calendar-days fa-3x"></i>
-        <h1 class="h3 mb-3 font-weight-normal">Create your account</h1>
 
         <label for="inputUsername" class="sr-only">Username</label>
         <input name="username" id="inputUsername" class="form-control" placeholder="Name" required="" autofocus="">
@@ -36,10 +35,11 @@
         <input name="email" type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
         
         <button id="updateDetails" class="btn btn-md btn-primary btn-block" type="submit">Update details</button>
-        <button id="changePassword" class="btn btn-md btn-danger btn-block">Change password</button>
-        <button id="updateDetailsBack" class="btn btn-md btn-secondary btn-block">Back</button>
 
     </form>
+
+    <button id="changePassword" class="btn btn-md btn-danger btn-block" disabled>Change password</button>
+    <button id="updateDetailsBack" class="btn btn-md btn-secondary btn-block">Back</button>
 
     <form action="/account" method="post" class="form-signin contents-hidden">
 
@@ -51,9 +51,18 @@
         
         <button id="updatePassword" class="btn btn-md btn-primary btn-block" type="submit">Update password</button>
         <button id="updatePasswordBack" class="btn btn-md btn-secondary btn-block">Back</button>
+
     </form>
 
 </div>
+
+<!-- Hidden divs to pass EJS variables to account.js through innerText -->
+<div id="ejsUsername" class="contents-hidden"><%= user.username %></div>
+<% if (user.email) { %>
+    <div id="ejsEmail" class="contents-hidden"><%= user.email %></div>
+<% } else { %>
+    <div id="ejsEmail" class="contents-hidden"></div>
+<% } %>
 
 <script src="scripts/account.js"></script>
 

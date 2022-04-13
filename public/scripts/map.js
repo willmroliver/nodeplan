@@ -28,9 +28,3 @@ const geocodeRequest = async (address, map, marker) => {
     map.setCenter(latLng);
     marker.setPosition(latLng);
 }
-
-
-var latLng = geocodeRequest(fullAddress);
-
-console.log(latLng.lat());
-console.log(latLng.lng());

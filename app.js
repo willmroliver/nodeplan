@@ -77,7 +77,9 @@ app.post('/edit-event/:eventid', userRouting.editEvent);
 
 // Renders account info/edit page
 app.route('/account')
-.get(userRouting.getAccount);
+.get(userRouting.getAccount)
+.post(userRouting.updateAccountDetails);
+
 
 app.listen(process.env.PORT || 3000, () => {
     console.log('Listening');

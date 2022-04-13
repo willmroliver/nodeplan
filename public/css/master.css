@@ -33,7 +33,7 @@ p {
     padding-right: 0;
 }
 
-@media only screen and (min-width: 992px) {
+@media only screen and (min-width: 768px) {
     .dropdown-menu {
         left: auto;
         right: 0;
@@ -356,9 +356,15 @@ a.calendar-prev, a.calendar-next {
 .event-info-wrapper {
     text-align: center;
 }
-.edit-event-popup, #updateAccountPopup {
+.edit-event-popup {
     background-color: white;
-    border-radius: 25px;
+
+    border-radius: 20px;
+    border-color:rgba(0, 0, 0, 0.15);
+    border-style: solid;
+    border-width: 2px;
+    box-shadow: 0 0 300px 400px rgba(0, 0, 0, 0.3);
+
     position: absolute;
     text-align: center;
     
@@ -367,21 +373,15 @@ a.calendar-prev, a.calendar-next {
     width: 40%;
     z-index: 2;
 }
+.edit-event-popup input {
+    display: block;
+}
 .popup-content {
     margin: 25px;
 }
 .popup-content input {
     padding: 5px 0;
     width: 70%;
-}
-.popup-background {
-    background-color: rgba(120, 120, 120, 0.6);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 150%;
-    z-index: 1;
 }
 .edit-btn-grid {
     display: grid;
@@ -428,7 +428,8 @@ a.calendar-prev, a.calendar-next {
         margin: 25px 0;
     }
     .edit-event-popup {
-        top: 38%;
+        box-shadow: 0 0 100px 100px rgba(0, 0, 0, 0.3);
+        top: 20%;
     }
     .popup-content input {
         width: 80%;
@@ -462,8 +463,83 @@ a.calendar-prev, a.calendar-next {
     margin: 20px 0;
     width: 350px;
 }
-@media only screen and (min-width: 600px) {
+.account-update-wrapper {
+    background-color: white;
+
+    border-radius: 20px;
+    border-color:rgba(0, 0, 0, 0.15);
+    border-style: solid;
+    border-width: 2px;
+
+    box-shadow: 0 0 300px 400px rgba(0, 0, 0, 0.3);
+    margin-top: 100px;
+    padding: 25px 10px;
+    position: absolute;
+    text-align: center;
+    
+    /* Firefox */
+    left: -moz-calc(50% - 200px);
+    /* WebKit */
+    left: -webkit-calc(50% - 200px);
+    /* Opera */
+    left: -o-calc(50% - 200px);
+    /* Standard */
+    left: calc(50% - 200px);
+
+    top: 10%;
+    width: 400px;
+    z-index: 2;
+}
+.account-update-wrapper button, .account-update-wrapper input {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+.account-update-wrapper button {
+    width: 50%;
+}
+.account-update-wrapper input {
+    width: 70%;
+}
+.account-update-wrapper i {
+    margin-bottom: 20px;
+}
+#updateDetails {
+    margin-top: 25px;
+}
+
+@media only screen and (max-width: 768px) {
     .account-update-wrapper {
-        width: 400px;
+        box-shadow: 0 0 100px 100px rgba(0, 0, 0, 0.3);
+        padding: 25px 10px;
+
+        top: 15%;
+        left: 20%;
+        width: 60%;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .account-update-wrapper {
+        top: 20%;
+        left: 10%;
+        width: 80%;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .account-btn-wrapper {
+        width: 95% !important;
+    }
+    .account-update-wrapper {
+        top: 25%;
+        left: 5%;
+        width: 90%;
+    }
+    .account-update-wrapper button {
+        width: 90%;
+    }
+    .account-update-wrapper input {
+        width: 90%;
     }
 }

@@ -1,17 +1,13 @@
 const editButton = document.getElementById('edit-event-btn');
 const cancelButton = document.getElementById('cancel-btn');
 const popupWindow = document.getElementById('edit-event-popup');
-const popupBackground = document.getElementById('popup-background');
-
 
 // Edit and cancel buttons work simply by showing and hiding the editor.
 editButton.addEventListener('click', () => {
     popupWindow.classList.replace('contents-hidden', 'edit-event-popup')
-    popupBackground.classList.add('popup-background');
 })
 cancelButton.addEventListener('click', () => {
     popupWindow.classList.replace('edit-event-popup', 'contents-hidden')
-    popupBackground.classList.remove('popup-background');
 })
 
 

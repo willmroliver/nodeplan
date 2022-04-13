@@ -207,7 +207,6 @@ module.exports.editEvent = editEvent;
 const getAccount = async (req, res) => {
 
     if (req.isAuthenticated()) {
-        console.log(req.user);
         res.render('account', {user: req.user});
     } else {
         res.redirect('/start');
@@ -215,3 +214,20 @@ const getAccount = async (req, res) => {
     
 }
 module.exports.getAccount = getAccount;
+
+
+const updateAccountDetails = async (req, res) => {
+
+    if (req.isAuthenticated()) {
+        const reqBody = req.body;
+        const updatedAccount = await dbHandler.findAccountAndUpdate(reqBody);
+
+        req.session.passport.user = updatedAccount;
+        res.redirect('/account');
+        
+    } else {
+        res.redirect('/start')
+    }
+    
+}
+module.exports.updateAccountDetails = updateAccountDetails;

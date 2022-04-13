@@ -21,7 +21,7 @@ const connectToMongoDB = async () => {
     try {
         client.connect();
     } catch (err) {
-        console.log(error);
+        console.log(err);
         client.close();
     }
 }
@@ -145,6 +145,34 @@ const insertAccount = (reqBody, authType) => {
 module.exports.insertAccount = insertAccount;
 
 
+const findAccountAndUpdate = (reqBody) => {
+
+    async function run() {
+        try {
+            const database = client.db(dbName);
+            const users = database.collection(usersCollection);
+
+            const doc = reqBody;
+
+            const result = await users.findOneAndUpdate(
+                { email: doc.email },
+                { $set: {
+                    username: doc.username,
+                    email: doc.email
+                }},
+                { returnDocument: 'after'}
+            );
+            return result.value;
+
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    return run();
+}
+module.exports.findAccountAndUpdate = findAccountAndUpdate;
+
+
 // For use with OAuth2.0.
 // First checks if an account is already associated with the Google/Facebook/etc. credentials,
 // If not, a new account is inserted and related to the Google/Facebook/etc. account.
@@ -179,6 +207,7 @@ const findOneOrInsert = async (authType, profile) => {
     }
 }
 module.exports.findOneOrInsert = findOneOrInsert;
+
 
 // EVENT CRUD FUNCTIONS
 
