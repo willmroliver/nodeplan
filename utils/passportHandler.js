@@ -64,8 +64,34 @@ async (accessToken, refreshToken, profile, done) => {
     }
 })
 
+
+// Strategy used when a user links an existing account with their Google Account
+// Same as above except DOES NOT insert a new account if no matching Google Account is found in DB
+const googleAltStrategy = new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/account/auth/google/link",
+    passReqToCallback: true
+},
+async (req, accessToken, refreshToken, profile, done) => {
+    try {
+        const result = await dbHandler.linkAccounts('google', profile, req.user);
+
+        if (result === null) {
+            return done(null, false, { message: "Link Failed" });
+
+        } else {
+            return done(null, result);
+        }
+    } catch (err) {
+        return done(err);
+    }
+})
+
+
 passport.use(localStrategy);
-passport.use(googleStrategy);
+passport.use('google', googleStrategy);
+passport.use('google-alt', googleAltStrategy);
 
 const getPassport = () => { return passport };
 module.exports.getPassport = getPassport;

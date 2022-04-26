@@ -194,7 +194,7 @@ const findOneOrInsert = async (authType, profile) => {
         if (user !== null) {
             return user;
         }
-        else if (user === null) {
+        else if (user === null && insert === true) {
             const result = await insertAccount(profile, authType);
             return await findOneAccount(authType, findValue);
         } 
@@ -208,6 +208,62 @@ const findOneOrInsert = async (authType, profile) => {
 }
 module.exports.findOneOrInsert = findOneOrInsert;
 
+
+// For linking existing node-plan accounts with a Google account through OAuth2.0
+const linkAccounts = async (authType, profile, reqBody) => {
+
+    try {
+        var findValue;
+
+        switch (authType) {
+            case 'google':
+                findValue = profile.id;
+                break;
+            default:
+                throw new Error('Invalid authType');
+        }
+
+        const user = await findOneAccount(authType, findValue);
+
+        if (user !== null) {
+            return user;
+        }
+        else if (user === null) {
+
+            switch (authType) {
+
+                case 'google':
+                    findValue = profile.id;
+
+                    const database = client.db(dbName);
+                    const users = database.collection(usersCollection);
+
+                    console.log(reqBody);
+
+                    const result = await users.findOneAndUpdate(
+                        { email: reqBody.email },
+                        { $set: {
+                            googleID: profile.id,
+                        }},
+                        { returnDocument: 'after' }
+                    );
+                        
+                    console.log(result);
+
+                    return result.value;
+
+                default:
+                    throw new Error('Invalid authType');
+            }
+        } 
+        else {
+            return null;
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
+module.exports.linkAccounts = linkAccounts;
 
 // EVENT CRUD FUNCTIONS
 

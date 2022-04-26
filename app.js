@@ -48,6 +48,19 @@ app.get('/auth/google/home',
     }
 )
 
+// Handles Google OAuth2.0 account-link attempts
+app.get('/account/auth/google',
+    passport.authenticate('google-alt', { scope: ['profile'] }),
+)
+app.get('/account/auth/google/link', 
+    passport.authenticate('google-alt', { failureRedirect: '/start' }), (req, res) => {
+        // Account authenticated with Google and exists in DB; Link and redirect.
+        // dbHandler.linkAccounts('google', req.user, req.body);
+
+        res.redirect('/');
+    }
+)
+
 app.post('/logout', userRouting.logout)
 
 // Renders the home page
